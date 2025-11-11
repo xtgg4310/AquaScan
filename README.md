@@ -16,11 +16,11 @@ Sensor Node:
 * Ping360 Scanning Sonar: https://bluerobotics.com/store/sonars/imaging-sonars/ping360-sonar-r1-rp/
 
 Sonar scanning principle:
-Sonar detect the human motion through receive the reflections from the human body. Considering that a human stands in front of the sonar, human's limbs and body show the main reflections. Due to the inevitable motion, the real sonar echoes will generate larger cluster than humans. A single sonar image is a 2D BEV image
+Sonar detects human motion by receiving the reflections from the human body. Considering that a human stands in front of the sonar, human's limbs and body show the main reflections. Due to the inevitable motion, the real sonar echoes will generate larger cluster than humans. A single sonar image is a 2D BEV image
 
 
 ### Software dependencies
-For common python packages such as numpy, matplotlib, you can download through pip or conda install these packages
+For common Python packages such as numpy, matplotlib, you can download them through pip or conda install these packages
 
 Some important package versions:
 * numpy version: 1.24.3
@@ -31,7 +31,7 @@ Some important package versions:
 * CUDA Version: 12.1
 * Opencv-python: 4.8.1.78
 
-If you want to control scanning sonar (Ping 360) to collect data by yourselves, you should install the brping packages by running the command below:
+To control scanning sonar (Ping 360) to collect data by yourself, you should install the brping packages by running the command below:
 ```bash
 pip install --user bluerobotics-ping --upgrade
 ```
@@ -41,23 +41,26 @@ To deploy Ping360 Sonar in the pool, we use a stand shown in the figure below to
 ![image](https://github.com/xtgg4310/AquaScan_Artifact/blob/main/figure/setup-2-2.jpg)
 
 ## Detail of each function
+This section is to introduce the function. If you want to run the data, please make sure that all parameters are configured. The function also leaves the areas to be manualy configure the parameters. You can check the python files.
 
 ### Sonar Control
 Please see the README.md in Sonar_control folder.
 
-### image reconstruction
+### Image reconstruction
 Please see the README.md in image_reconstruction folder.
 
-### object detection
+### Object detection
 We have three codes:
 * pre_sonar_bias.py: remove the bias caused by mechanical rotation of sonar (seldom happens)
 * pre_sonar.py: denoise sonar images and detect objects on the sonar image.
-* pre_sonar_opt_yoho: optimize the dynamic object detection with binary search
+* pre_sonar_opt: optimize the dynamic object detection with binary search. This function is suitable for shallow pools and noisy environments.
 
-Denoising and object detection contains both static noise remove(remove noise caused by poolsides and wall reflection which may localized outside the wall).
+Denoising and object detection contains both static noise remove(remove noise caused by poolsides and wall reflection which may be localized outside the wall).
+
+Before using the function for your collected data, you should configure the data_remove and remove_line in the pre_sonar(_opt_yoho). Data_remove means removing the areas of the background signals. Remove_line means removing the swimming lanes.
 
 #### Usage Guide
-#### Parameters of pre_sonar_opt_yoho.py
+#### Parameters of pre_sonar_opt.py
 | Argument Name | Argument Type | Required | Help Information |
 | --- | --- | --- | --- |
 | `--pre` | int | Yes | preprocess type |
@@ -127,7 +130,7 @@ We have two codes for tracking the objects:
 | `--save_dir_all` | str | Yes | save_dir |
 
 ### Moving detection
-Moving_detect.py is used for movement detection.
+Moving_detect.py is used for movement detection. 
 
 #### Usage Guide
 #### Parameters of Moving_detect.py
@@ -183,9 +186,9 @@ generate_data_all.py is used for generating inference data
 | `--smooth_cfg` | str | Yes | smooth_cfg |
 | `--start_cfg` | str | Yes | start_cfg |
 | `--gt_cfg` | str | Yes | gt_cfg |
-| `--gt_mode` | int | Yes | gt_cfg |
+| `--gt_mode` | int | Yes | gt_mode |
 | `--gt_trans` | int | Yes | gt_trans |
-| `--gt_sc` | str (multiple values) | Yes | gt_trans |
+| `--gt_sc` | str (multiple values) | Yes | gt_sc |
 | `--dis` | int | Yes | distance |
 | `--label_type` | int | Yes | label_type |
 | `--sample` | int | Yes | sample |
