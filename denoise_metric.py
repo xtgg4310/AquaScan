@@ -213,7 +213,7 @@ def compare_results(detect_path,label_path,yolo=False,eval_format=False):
         wrong_num+=wrong_re
         frame_num+=1
         obj_num+=len(label_obj)
-        for j in range(len(miss_re)): # here we recognize all the subject has only one box. But in state recognition, the ones split from the same subject will share the same GT label.
+        for j in range(len(miss_re)): # here we think all the subject has only one box. But in state recognition, the ones split from the same subject will share the same GT label.
             if miss_re[j]==1:
                 miss_num+=1
             else:
