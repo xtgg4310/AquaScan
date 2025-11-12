@@ -1,6 +1,6 @@
 # Mobicom2025: AquaScan: A Sonar-based Underwater Sensing System for Human Activity Monitoring
 
-## This repo contains the code, deployment instructions, Experiment instructions, and detail usage of each function. if you find our repo is useful, pleaase cite our paper.
+## This repo contains the code, deployment instructions, and detailed usage of each function. If you find our repo is useful, please cite our paper.
 
 ## Contact information
 If you have any questions, please contact the author through the email: 1155161507@link.cuhk.edu.hk (CUHK E-mail). 626201515@qq.com (Personal E-mail).
@@ -9,14 +9,14 @@ If you have any questions, please contact the author through the email: 11551615
 
 ### Hardware dependencies
 
-Computing platform: A server with CPU and GPU. Our code is tested on a computer with a 7950x3D CPU, 4090 24GB GPU, and 64GB RAM.
+Computing platform: A server with a CPU and GPU. Our code is tested on a computer with a 7950x3D CPU, 4090 24GB GPU, and 64GB RAM.
 
 Sensor Node:
 * Control Unit: Raspberry Pi 4B model 8GB RAM
 * Ping360 Scanning Sonar: https://bluerobotics.com/store/sonars/imaging-sonars/ping360-sonar-r1-rp/
 
 Sonar scanning principle:
-Sonar detects human motion by receiving the reflections from the human body. Considering that a human stands in front of the sonar, human's limbs and body show the main reflections. Due to the inevitable motion, the real sonar echoes will generate larger cluster than humans. A single sonar image is a 2D BEV image
+Sonar detects human motion by receiving the reflections from the human body. Considering that a human stands in front of the sonar, the human's limbs and body show the main reflections. Due to the inevitable motion, the real sonar echoes will generate a larger cluster than humans. A single sonar image is a 2D BEV image
 
 
 ### Software dependencies
@@ -41,7 +41,7 @@ To deploy Ping360 Sonar in the pool, we use a stand shown in the figure below to
 ![image](https://github.com/xtgg4310/AquaScan_Artifact/blob/main/figure/setup-2-2.jpg)
 
 ## Detail of each function
-This section is to introduce the function. If you want to run the data, please make sure that all parameters are configured. The function also leaves the areas to be manualy configure the parameters. You can check the python files.
+This section is to introduce the function. If you want to run the data, please make sure that all parameters are configured. The function also leaves the areas to be manually configured for the parameters. You can check the Python files.
 
 ### Sonar Control
 Please see the README.md in Sonar_control folder.
@@ -55,7 +55,7 @@ We have three codes:
 * pre_sonar.py: denoise sonar images and detect objects on the sonar image.
 * pre_sonar_opt: optimize the dynamic object detection with binary search. This function is suitable for shallow pools and noisy environments.
 
-Denoising and object detection contains both static noise remove(remove noise caused by poolsides and wall reflection which may be localized outside the wall).
+Denoising and object detection contain both static noise removal (remove noise caused by poolsides and wall reflection, which may be localized outside the wall).
 
 Before using the function for your collected data, you should configure the data_remove and remove_line in the pre_sonar(_opt). Data_remove means removing the areas of the background signals. Remove_line means removing the swimming lanes.
 
