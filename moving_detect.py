@@ -403,6 +403,8 @@ def state_smooth(state_dict,len_win,smooth_cfg=[]):
                             else:
                                 state_dict[key][2][0]=state_dict[key][1][0]
                     #continue here should have a continue, but raw code does not, so the i=2 will be smooth as the other ones in the following loop.
+                    #another reason why there is no continue here: the first is non-moving (we cannot recognize moving at the beginning). If 1-4 is non, moving, non, moving, it seems that we should consider it as a non-moving subjects. Without continue, we can smooth this state.
+                    #Without continue here will not add more overhead here since we still use the state in the same time windows.
                 else:
                     continue
                         
