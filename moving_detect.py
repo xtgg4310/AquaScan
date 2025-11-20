@@ -402,6 +402,7 @@ def state_smooth(state_dict,len_win,smooth_cfg=[]):
                                     state_dict[key][2][0]=state_dict[key][1][0]
                             else:
                                 state_dict[key][2][0]=state_dict[key][1][0]
+                    #continue here should have a continue, but raw code does not, so the i=2 will be smooth as the other ones in the following loop.
                 else:
                     continue
                         
