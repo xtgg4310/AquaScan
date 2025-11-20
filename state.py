@@ -252,7 +252,7 @@ def motion_mark_generate(motion):
     else:
         return 'M'
 
-def re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,timestamp,time_thre,path):
+def re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,timestamp,time_thre,path): # resmooth the first 2 states when their following state changes. This design is due to lack of past information. To reduce the overhead, we have a strict re-smooth conditions to not easily trigger it. In most of cases, this will not be triggered so the latency of first 2 states will not increase.
     if len(motion_flag_list)<3:
         return motion_flag_list
     if (motion_flag_list[1]!=motion_flag_list_old[1] or motion_flag_list[2]!=motion_flag_list_old[2]) and timestamp[2]-timestamp[0]<=time_thre and motion_flag_list[0]!=motion_flag_list[1] and moving_flag_list[2]!="C" and moving_flag_list[1]!="C":
@@ -419,7 +419,7 @@ def read_state_list(path):
     label=np.array(label)
     return state,real,label
 
-def motion_state_smooth(real_state,timestamp,time_thre,len_win=5):
+def motion_state_smooth(real_state,timestamp,time_thre,len_win=5): #a sliding window in a threshold, the main reason why latency is high.
     #print(time_thre)
     
     for i in range(len(real_state)):
@@ -556,7 +556,7 @@ class swimmer_state:
         self.location.append(location)
         self.timestamp.append(timestamp)
         
-    def state_smooth(self,windows,step):
+    def state_smooth(self,windows,step): #useless methods, please drop it.
         motion_filter=[]
         re_motion=np.array(self.motion)
         for i in range(0,len(self.motion),step):
@@ -818,7 +818,7 @@ class state_transfer:
         self.duration=duration
         self.duration_ratio=duration_ratio
         self.cur_state=cur_state
-        self.check_fre=check_fre
+        self.check_fre=check_fre #useless, can delete
         self.dronwing_mark={
             "Motion":['S','M'],
             "Location":['U','C'],
@@ -986,9 +986,10 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
         sonar=file.split("_")[1]
         if cfg_har==['0.0']:
             time_thre=-1
-            time_single=3.0 #config, time for re_smooth of first activty.
+            time_single=3.0 #config, time_thre for re_smooth of first activty, time_single is useless now, you can set it as 0
             time_thre=time_single*2+np.int32(time_single)-1
         else:
+            time_single=3.0 #config, time_thre for re_smooth of first activty, time_single is useless now, you can set it as 0
             time_thre=np.float32(cfg_har[0])
             
         check_fre=np.int32(30.0/time_single)+1
@@ -1030,11 +1031,11 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
             state_fre_gt=state_transfer_re_gt.check_frequency_switch()
             state_dur_gt=state_transfer_re_gt.check_state_duration()
             state_detect_list_gt=[GT_one[0],GT_one[1],state_fre_gt,state_dur_gt]
-            state_final=state_transfer_re_gt.transfer_state_mark(out_input=True,action=state_detect_list_gt)
-            detect_gt.append(state_final)
-            state_score_gt.update_state(state_final)  
-            state_transfer_re_gt.update_cur_state(state_final) 
-            state_detected_gt=state_final
+            state_final_gt=state_transfer_re_gt.transfer_state_mark(out_input=True,action=state_detect_list_gt) #useless now, just for reference
+            detect_gt.append(state_final_gt)
+            state_score_gt.update_state(state_final_gt)  
+            state_transfer_re_gt.update_cur_state(state_final_gt) 
+            state_detected_gt=state_final_gt
             #print(state_detected,state_detected_gt)
             single_list_detected.append(state_detected)
             single_list_GT.append(state_detected_gt)
@@ -1148,6 +1149,7 @@ def overall(martix):
 
 
 def compare_metirc(gt_dir,detect_dir,moving_dir,time_single=2.57,target=[],target_file=[],dis=13.0,label_type=0,sampel_time=90,gt_config=[]):
+    #dis is useless now. 
     state=['moving','motionless','patting','struggling','drowning']
     gt_dataset,gt_dict=generate_gt_label(gt_dir,time_single,target,label_type,gt_config)
 
@@ -1282,8 +1284,8 @@ if __name__=='__main__':
     detect_dir=save_dir_all+"/"+args.detect
     label_gt_dir=args.label
     label_type=args.label_type
-    dis_=args.dis
-    # arg.trans is disabled, you can use it to control. the gt config
+    dis_=args.dis #useless
+    # arg.trans is disabled, you can use it to control the gt config
     
     har_cfg=[args.har_cfg]
     smooth_cfg=[args.smooth_cfg]
