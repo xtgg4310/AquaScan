@@ -677,7 +677,7 @@ class swimmer_state:
                     S_count+=1
                 if i <= len(self.motion)-2:
                     if self.motion[i][1]==1 and self.motion[i+1][1] == 0:
-                        Motion_list.append(F+1)
+                        Motion_list.append(F) 
                         time_end=self.timestamp[i+bias]
                         time_list.append(time_end-time_start)
                         F=0
@@ -905,7 +905,7 @@ class state_transfer:
         frequency_score_ratio=frequency_score['latest']      
         if frequency_score_ratio==0:
             return self.dronwing_mark["Frequency"][1]
-        if frequency_score_ratio>=check_fre*0.95 and frequency_score['latest_time']>=self.check_fre_time*0.95:
+        if frequency_score_ratio>=check_fre*0.95 and frequency_score['latest_time']>=self.check_fre_time*0.95: #frequency_score_ratio/check_fre is the 𝐹𝑚𝑜𝑡𝑖𝑜𝑛. 0.95 is the threshold.
             return self.dronwing_mark["Frequency"][0]
         else:
             return self.dronwing_mark["Frequency"][1]     
