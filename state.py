@@ -652,7 +652,7 @@ class swimmer_state:
                     S_count+=1
                 if i <= len(self.motion)-2:
                     if self.motion[i][1]==1 and self.motion[i+1][1] == 0:
-                        Motion_list.append(F+1)
+                        Motion_list.append(F)
                         time_end=self.timestamp[i+bias]
                         time_list.append(time_end-time_start)
                         F=0
