@@ -464,8 +464,9 @@ def motion_state_smooth(real_state,timestamp,time_thre,len_win=5): #a sliding wi
                             #print(k)
                             if i+k<0:
                                 continue
-                            if k>0 and np.abs(timestamp[i+k]-timestamp[i])>=time_thre and i>2:
-                                if k==1 and real_state[i-2]!=real_state[i-3]: #using the past state will not add overhead.
+                            if k>0 and np.abs(timestamp[i+k]-timestamp[i])>=time_thre:
+                                if k==1 and i>=3 and real_state[i-2]!=real_state[i-3]:
+                                    #continue, you can try to skip this step
                                     diff_count=0
                                     same_count=0
                                     break
@@ -493,8 +494,9 @@ def motion_state_smooth(real_state,timestamp,time_thre,len_win=5): #a sliding wi
                     if i+k<0:
                         #print(i+k,k,"skip")
                         continue
-                    if k>0 and np.abs(timestamp[i+k]-timestamp[i])>=time_thre and i>2:
-                        if k==1 and real_state[i-2]!=real_state[i-3]:
+                    if k>0 and np.abs(timestamp[i+k]-timestamp[i])>=time_thre:
+                        if k==1 and i>=3 and real_state[i-2]!=real_state[i-3]:
+                            #continue, you can try to skip this step
                             diff_count=0
                             same_count=0
                             break
@@ -775,7 +777,7 @@ class swimmer_state:
                     count+=1
         self.duration_ratio=count*1.0/total_count
         
-    def update(self,motion,location,timestamp):
+    def update(self,motion,location,timestamp): #useless now
         self.update_move(motion,location,timestamp)
         self.update_motion_score()
         self.update_location_score()
@@ -1148,7 +1150,7 @@ def overall(martix):
     return correct*1.0/count_all
 
 
-def compare_metirc(gt_dir,detect_dir,moving_dir,time_single=2.57,target=[],target_file=[],dis=13.0,label_type=0,sampel_time=90,gt_config=[]):
+def compare_metirc(gt_dir,detect_dir,moving_dir,time_single=2.57,target=[],target_file=[],dis=13.0,label_type=0,sampel_time=90,gt_config=[]): #time_single is useless now
     #dis is useless now. 
     state=['moving','motionless','patting','struggling','drowning']
     gt_dataset,gt_dict=generate_gt_label(gt_dir,time_single,target,label_type,gt_config)
