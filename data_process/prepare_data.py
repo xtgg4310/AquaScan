@@ -345,7 +345,7 @@ class SonarData():
         print(time.time()-time_start)
         print("\n")
     
-    def compare_objects_raw(self,bias=False,concat=False):
+    def compare_objects_raw(self,bias=False,concat=False): #use for both training and inferences
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
             while len(self.past_objects) < self.channels:
@@ -492,8 +492,82 @@ class SonarData():
                     detect_flags[idx] = False
         
         return candidate_regions, candidate_datas
+        
+    def compare_objects(self): #only for inference
+        empty_data = np.zeros_like(self.past_sonar_datas[-1])
+        while len(self.past_objects) < self.channels:
+            self.past_objects.insert(0, self.past_objects[-1])
+            self.past_sonar_datas.insert(0, empty_data)
+            self.past_data_paths.insert(0, 'empty')
+            self.past_label_paths.insert(0, 'empty')
+            self.humans_id.insert(0,[])   
+        total_frames = len(self.past_objects)
+        # TODO: candidate_data对于每个object都是不同的，所以最后并不是只有一个candidate_data
+        # 但是candidate_data的中间结果不能直接输出，需要想个办法解决
+        # 所有object的基准都是以current frame为主的，也就是说candidate region不会超过current frame的范围
+        # 但是再往前的frame计算是否是同一个obj是基于past objects的，所以要在代码逻辑上注意
+        # 第一次loop之后，len(candidata_datas) == len(candidate_regions) == len(self.past_objects[-1])
 
-    def compare_objects(self,bias=False,concat=False):
+        iou_threshold=0.3 #raw design:iou_threshold=0.3
+        last_objects = deepcopy(self.past_objects[-1])
+        detect_flags = [True for _ in range(len(last_objects))]
+        candidate_datas = [self.past_sonar_datas[-1] for _ in range(len(last_objects))]
+        candidate_regions = deepcopy(last_objects)
+        if len(last_objects) == 0:
+            return None, None
+        for i in range(total_frames - 1, 0, -1):
+            # former frame
+            objects_old = self.past_objects[i - 1]
+            humans_old_id=self.humans_id[i - 1]
+            for idx, region in enumerate(candidate_regions):
+                # compare last_objects and previous objects (objects_old). combine regions
+                # then last_objects => previous objects
+                last_obj = last_objects[idx]
+                last_candidate_data = candidate_datas[idx]
+                human_id=self.humans_id[-1][idx]
+                if last_obj is None:
+                    assert detect_flags[idx] == False
+                    candidate_region, candidate_data = self.combine_objects(region, region, 
+                                            last_candidate_data, empty_data)
+                    candidate_regions[idx] = candidate_region
+                    candidate_datas[idx] = candidate_data
+                    continue
+                if len(objects_old) == 0:
+                    candidate_region, candidate_data = self.combine_objects(region, region, 
+                                            last_candidate_data, empty_data)
+                    candidate_regions[idx] = candidate_region
+                    candidate_datas[idx] = candidate_data
+                    last_objects[idx] = None
+                    detect_flags[idx] = False
+                    continue
+                #max_IoU=0.0
+                max_IoU_obj=None
+                for humam_idx in range(len(humans_old_id)):
+                    if human_id==humans_old_id[humam_idx]:
+                        max_IoU_obj=objects_old[humam_idx]
+                        break
+
+                if max_IoU_obj!=None and calculate_iou_on_small(last_obj, max_IoU_obj)>=0.00:
+                    temp_data = self.get_clean_data(self.past_sonar_datas[i - 1], max_IoU_obj)
+                    candidate_region, candidate_data = self.combine_objects(region, max_IoU_obj,
+                                    last_candidate_data, temp_data)
+                    candidate_regions[idx] = candidate_region
+                    candidate_datas[idx] = candidate_data
+                    last_objects[idx] = max_IoU_obj
+                    #break
+                else:
+                    candidate_region, candidate_data = self.combine_objects(region, region, 
+                                        last_candidate_data, empty_data)
+                    candidate_regions[idx] = candidate_region
+                    candidate_datas[idx] = candidate_data
+                    last_objects[idx] = None
+                    detect_flags[idx] = False
+                    #print(candidate_data.shape)
+        #print(" ")
+        return candidate_regions, candidate_datas
+    
+    '''
+    def compare_objects(self,bias=False,concat=False): for both training and inference
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
             while len(self.past_objects) < self.channels:
@@ -630,7 +704,7 @@ class SonarData():
                     #print(candidate_data.shape)
         #print(" ")
         return candidate_regions, candidate_datas
-    
+     '''
     def get_clean_data(self, sonar_data, obj):
         empty_data = np.zeros_like(sonar_data)
         empty_data[obj[0]:obj[1], obj[2]:obj[3]] = sonar_data[obj[0]:obj[1], obj[2]:obj[3]]
