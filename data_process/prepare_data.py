@@ -345,7 +345,7 @@ class SonarData():
         print(time.time()-time_start)
         print("\n")
     
-    def compare_objects_raw(self,bias=False,concat=False): #use for both training and inferences
+    def compare_objects_raw(self,bias=False,concat=False): #use for both training(bias and concat) and inferences
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
             while len(self.past_objects) < self.channels:
@@ -567,7 +567,7 @@ class SonarData():
         return candidate_regions, candidate_datas
     
     '''
-    def compare_objects(self,bias=False,concat=False): for both training and inference
+    def compare_objects(self,bias=False,concat=False): for both training(bias and concat) and inference
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
             while len(self.past_objects) < self.channels:
