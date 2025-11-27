@@ -70,7 +70,7 @@ This program controls the Ping360 sonar device, supporting multiple scanning mod
 
 **Mode 3 (Back-and-forth scanning)**  
    ```bash
-   python ping360_control_v4.py --mode 3 --count 5 --step 2 --sonar_num 11 --batch_id 20231001 --D --H 10 --start 0 --end 399 --step 3 --dis 25 --udp 192.168.1.11:12345 --M 17
+   python ping360_control_v4.py --mode 3 --count 5 --sonar_num 11 --batch_id 20231001 --D --H 10 --start 0 --end 399 --step 3 --dis 25 --udp 192.168.1.11:12345 --M 17
    ```
 
 ---
