@@ -227,7 +227,7 @@ def generate_loc(sonar,obj,dis=17.0):
     print(obj)
     x_mid=(obj[2]+obj[3])/2.0
     y_mid=(obj[1]+obj[0])/2.0
-    x_real_mid=x_mid*np.cos(y_mid*0.9*np.pi/180.0)*dis/499 #500->499, has little difference #angle-y axis dis-x axis, read data [min_angle, max_angle, min_dis, max_dis], angle unit is gradian, 0.9*gradian=1 degree
+    x_real_mid=x_mid*np.cos(y_mid*0.9*np.pi/180.0)*dis/499 #499 gaps, 500->499, has little difference, 500 tested without any influence. #angle-y axis dis-x axis, read data [min_angle, max_angle, min_dis, max_dis], angle unit is gradian, 0.9*gradian=1 degree
     y_real_mid=x_mid*np.sin(y_mid*0.9*np.pi/180.0)*dis/499
     print(obj[0],obj[1],obj[2],obj[3])
     print(sonar.shape)
