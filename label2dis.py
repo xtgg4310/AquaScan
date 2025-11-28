@@ -227,8 +227,8 @@ def generate_loc(sonar,obj,dis=17.0):
     print(obj)
     x_mid=(obj[2]+obj[3])/2.0
     y_mid=(obj[1]+obj[0])/2.0
-    x_real_mid=x_mid*np.cos(y_mid*0.9*np.pi/180.0)*dis/500 #angle-y axis dis-x axis, read data [min_angle, max_angle, min_dis, max_dis], angle unit is gradian, 0.9*gradian=1 degree
-    y_real_mid=x_mid*np.sin(y_mid*0.9*np.pi/180.0)*dis/500
+    x_real_mid=x_mid*np.cos(y_mid*0.9*np.pi/180.0)*dis/499 #500->499, has little difference #angle-y axis dis-x axis, read data [min_angle, max_angle, min_dis, max_dis], angle unit is gradian, 0.9*gradian=1 degree
+    y_real_mid=x_mid*np.sin(y_mid*0.9*np.pi/180.0)*dis/499
     print(obj[0],obj[1],obj[2],obj[3])
     print(sonar.shape)
     if obj[0]==obj[1]:
@@ -244,8 +244,8 @@ def generate_loc(sonar,obj,dis=17.0):
             x_ener+=sonar_seg[i-obj[0]][j-obj[2]]
     x_aver=x_sum/x_ener
     y_aver=y_sum/y_ener
-    x_real_aver=x_aver*np.cos(y_aver*0.9*np.pi/180.0)*dis/500
-    y_real_aver=x_aver*np.sin(y_aver*0.9*np.pi/180.0)*dis/500
+    x_real_aver=x_aver*np.cos(y_aver*0.9*np.pi/180.0)*dis/499
+    y_real_aver=x_aver*np.sin(y_aver*0.9*np.pi/180.0)*dis/499
     return x_real_aver,y_real_aver,x_real_mid,y_real_mid,[x_aver,y_aver,x_mid,y_mid],[obj[0],obj[1],obj[2],obj[3]],obj[4] #here, x y not represent dis-angle , but a coordinate.
     
 
