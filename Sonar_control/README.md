@@ -11,7 +11,7 @@ This program controls the Ping360 sonar device, supporting multiple scanning mod
   - `Mode 1`: Count-controlled scanning (fixed cycles)  
   - `Mode 2`: Tracking scan with skipping pattern  
   - `Mode 3`: Back-and-forth scanning  
-  - `Mode 4`: Dynamic directional tracking scan  
+  - `Mode 4`: bi-directional tracking scan  
 - **Data Storage**: Raw data saved as `.txt` files organized by batch and device ID.  
 - **Visualization**: Generates polar and Cartesian (XY) sonar images.  
 - **Background Noise Cancellation**: Enable via `--b` parameter.  
