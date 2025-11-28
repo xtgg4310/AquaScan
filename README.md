@@ -41,7 +41,7 @@ To deploy Ping360 Sonar in the pool, we use a stand shown in the figure below to
 ![image](https://github.com/xtgg4310/AquaScan_Artifact/blob/main/figure/setup-2-2.jpg)
 
 ## Detail of each function
-This section is to introduce the function. If you want to run the data, please make sure that all parameters are configured. The function also leaves the areas to be manually configured for the parameters. You can check the Python files.
+This section is to introduce the function. If you want to run the data, please make sure that all parameters are configured. The function also leaves the areas to be manually configured for the parameters. You can check the python files.
 
 ### Sonar Control
 Please see the README.md in Sonar_control folder.
@@ -55,7 +55,7 @@ We have three codes:
 * pre_sonar.py: denoise sonar images and detect objects on the sonar image.
 * pre_sonar_opt: optimize the dynamic object detection with binary search. This function is suitable for shallow pools and noisy environments.
 
-Denoising and object detection contain both static noise removal (remove noise caused by poolsides and wall reflection, which may be localized outside the wall).
+Denoising and object detection contain both static noise removal (removing noise caused by poolsides and wall reflection, which may be localized outside the wall).
 
 Before using the function for your collected data, you should configure the data_remove and remove_line in the pre_sonar(_opt). Data_remove means removing the areas of the background signals. Remove_line means removing the swimming lanes.
 
@@ -85,7 +85,7 @@ Before using the function for your collected data, you should configure the data
 | `--parap` | int (multiple values) | Yes | para for resizing sonar images |
 | `--paral` | int (multiple values) | Yes | para for resizing labels |
 | `--blur_size` | int (multiple values) | Yes | blur size for dynamic processing |
-| `--human_size` | int | Yes | human size as the threshold for dynamuic processing (calculate as the bbox size with specific distance) |
+| `--human_size` | int | Yes | human size as the threshold for dynamic processing (calculated as the bbox size with a specific distance) |
 | `--remove` | int | Yes | remove semic/static noise under different settings |
 | `--bg_path` | str | Yes | background data path |
 | `--bg_sc` | str | Yes | backgroud folder name |
@@ -101,10 +101,14 @@ Before using the function for your collected data, you should configure the data
 | `--data` | str | Yes | data_path |
 | `--label` | str | Yes | label_path |
 
+Before using pre_sonar_bias.py, please configure the path in the file.
+
 ### tracking
 We have two codes for tracking the objects:
 * label2dis.py --generate location of subject in the sonar images
 * track.py --generate tracjectory of subjects
+
+Before using label2dis.py and track.py, please set the configuration in each method. The state record in label2dis.py and track.py is used for reference, not the recognized activities; you can even remove it or set it to another mark.
 
 #### Usage Guide
 #### Parameters of label2dis.py
@@ -116,7 +120,7 @@ We have two codes for tracking the objects:
 | `--type` | int | Yes | data_type |
 | `--remove` | int | Yes | data_type |
 | `--dis` | int | Yes | dis |
-| `--parad` | int (multiple values) | Yes | parad |
+| `--parad` | int (multiple values) | Yes | parad , the same with pre_sonar.py |
 | `--save_dir_all` | str | Yes | label_path |
 
 #### Parameters of track.py
@@ -126,11 +130,13 @@ We have two codes for tracking the objects:
 | `--label` | str | Yes | label_path |
 | `--track` | str | Yes | tracking |
 | `--track_re` | str | Yes | track_results |
-| `--cfg` | int (multiple values) | Yes | cfg |
+| `--cfg` | int (multiple values) | Yes | track threshold setting |
 | `--save_dir_all` | str | Yes | save_dir |
 
 ### Moving detection
 Moving_detect.py is used for movement detection. 
+
+Before using moving_detect.py, please make sure that the threshold is set.
 
 #### Usage Guide
 #### Parameters of Moving_detect.py
@@ -139,8 +145,8 @@ Moving_detect.py is used for movement detection.
 | `--data` | str | Yes | data_path |
 | `--save` | str | Yes | save_path |
 | `--save_dir_all` | str | Yes | save_dir |
-| `--pre_cfg` | float (multiple values) | Yes | pre_cfg |
-| `--smooth_cfg` | float (multiple values) | Yes | smooth_cfg |
+| `--pre_cfg` | float (multiple values) | Yes | pre_cfg, the time window use for moving trace calcualtion. |
+| `--smooth_cfg` | float (multiple values) | Yes | smooth_cfg, the time window use for smooth results. |
 
 ### Generate inference data for motion detection
 generate_data_all.py is used for generating inference data
@@ -155,10 +161,12 @@ generate_data_all.py is used for generating inference data
 | `--file` | str | Yes | file |
 | `--save_dir_all` | str | Yes | save_dir |
 
-### Recognizing activities through state-transfer-machine
+### Recognizing activities through a state-transfer-machine
 * infe_state.py: motion detection.
 * split_results.py: record the motion detection results in separate files.
-* state.py: recognize activities. 
+* state.py: recognize activities.
+
+Before using state.py, please make sure the threshold is set.
 
 #### Usage Guide
 #### Parameters of infe_state.py & train.py
@@ -182,9 +190,9 @@ generate_data_all.py is used for generating inference data
 | `--har` | str | Yes | har |
 | `--detect` | str | Yes | detect |
 | `--label` | str | Yes | detect |
-| `--har_cfg` | str | Yes | har_cfg |
-| `--smooth_cfg` | str | Yes | smooth_cfg |
-| `--start_cfg` | str | Yes | start_cfg |
+| `--har_cfg` | str | Yes | har_cfg, use for constraint of re-smoothing the first 2 states |
+| `--smooth_cfg` | str | Yes | smooth_cfg, use for motion state smoothing. |
+| `--start_cfg` | str | Yes | start_cfg, use for record the timestamp. |
 | `--gt_cfg` | str | Yes | gt_cfg |
 | `--gt_mode` | int | Yes | gt_mode |
 | `--gt_trans` | int | Yes | gt_trans |
