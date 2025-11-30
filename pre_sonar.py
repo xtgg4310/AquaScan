@@ -200,7 +200,7 @@ def fuse_objects(denoised_objs, raw_objs, iou_threshold=0.2):
         fused_objs = denoised_objs
     return fused_objs
 
-def fuse_denoised_objects(denoised_objs, raw_objs, iou_threshold=0.3): # this is not a good design. In nearly all the cases, different subjects have a extremely low overlap therefore it still works. But a better way is to find the overlap areas with highest ratio. We also remove the repeated subjects, which avoid double detection.
+def fuse_denoised_objects(denoised_objs, raw_objs, iou_threshold=0.3): # save all possible objs. We also remove the repeated subjects, which avoid double detection.
     if len(denoised_objs) == 0:
         return raw_objs
     fused_objs = []
