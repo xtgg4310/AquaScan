@@ -280,14 +280,14 @@ def write_label(pos,save_file):
         f.writelines(record)
     f.close()
 
-def label2pos(label_direct,data_direct,gt_direct,save_direct,save_eval_label_dir,read_type,data_config,dis,remove):
-    scenario=os.listdir(label_direct)
+def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_dir,read_type,data_config,dis,remove):
+    scenario=os.listdir(detect_direct)
     dir_create(save_direct)
     dir_create(save_eval_label_dir)
     if ".DS_Store" in scenario:
         scenario.remove(".DS_Store")
     for i in range(len(scenario)):    
-        label_raw_path=label_direct+"/"+scenario[i]
+        detect_raw_path=detect_direct+"/"+scenario[i]
         data_path_scenario=data_direct+"/"+scenario[i]
         gt_path_scenario=gt_direct+"/"+scenario[i]
         save_scenario=save_direct+"/"+scenario[i]
@@ -298,7 +298,7 @@ def label2pos(label_direct,data_direct,gt_direct,save_direct,save_eval_label_dir
         if ".DS_Store" in sonars:
             sonars.remove(".DS_Store")
         for sonar in sonars:
-            label_path_single=label_raw_path+"/"+sonar+"/txt"
+            detect_path_single=detect_raw_path+"/"+sonar+"/txt"
             data_path_sonar=data_path_scenario+"/"+sonar
             gt_path_sonar=gt_path_scenario+"/"+sonar
             save_sonar=save_scenario+"/"+sonar
@@ -310,7 +310,7 @@ def label2pos(label_direct,data_direct,gt_direct,save_direct,save_eval_label_dir
                 files.remove(".DS_Store")
             files.sort(key=lambda x:np.int32(x.split('_')[1][:-4]))
             for file in files:
-                label_path_one=label_path_single+"/"+file
+                detect_path_one=detect_path_single+"/"+file
                 data_path_one=data_path_sonar+"/"+file
                 if read_type!=0 and read_type!=1:
                     data_path_one=data_path_sonar+"/"+file[:-4]+".npy"
@@ -328,7 +328,7 @@ def label2pos(label_direct,data_direct,gt_direct,save_direct,save_eval_label_dir
                 else:
                     pre=False
                 sonar_data=ps.data_pre(sonar_data,data_config[0],data_config[1],remove,pre)
-                _,_,detect_obj=read_rescale_results(label_path_one,ratio=3.0)
+                _,_,detect_obj=read_rescale_results(detect_path_one,ratio=3.0)
                 humans,states,objs_gt=read_rescale_results_gt(gt_file)
                 print(data_path_one)
                 pos_list=label2pos_seg(sonar_data,detect_obj,objs_gt,states,humans,dis)
@@ -348,7 +348,7 @@ def main():
     args = parser.parse_args()
     save_pos_dir=args.save_dir_all
     data_dir=args.data
-    label_dir=save_pos_dir+"/"+args.detect
+    detect_dir=save_pos_dir+"/"+args.detect
     gt_dir=save_pos_dir+"/"+args.gt
 
     save_infer_label=save_pos_dir+"/reference_label_not_infe"
@@ -371,7 +371,7 @@ def main():
     data_type=args.type
     parad_input=[threshold_para,dis_para]
     print(parad_input)
-    label2pos(label_dir,data_dir,gt_dir,save_dir,save_infer_label,data_type,data_config=parad_input,dis=dis,remove=remove)
+    label2pos(detect_dir,data_dir,gt_dir,save_dir,save_infer_label,data_type,data_config=parad_input,dis=dis,remove=remove)
     
 if __name__=="__main__":
     main()
