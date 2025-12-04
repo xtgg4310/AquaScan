@@ -1027,20 +1027,23 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
             state_transfer_re.update_cur_state(state_final) 
             state_detected=state_final
                 
-            state_score_gt.update_features(GT_one,timestamp[i],moving_GT_list[i])
+            state_score_gt.update_features(GT_one,timestamp[i],moving_GT_list[i]) #only for reference, not used for inference and metric calculation, you can even randomly input the gt.
             fre_info_gt,duration_gt,duration_ratio_gt=state_score_gt.frequency_score,state_score_gt.duration,state_score_gt.duration_ratio
             state_transfer_re_gt=state_transfer(cur_state=state_detected_gt,frequency=fre_info_gt,duration=duration_gt,duration_ratio=duration_ratio_gt,state=state,check_fre=check_fre,time_frame=time_single,check_fre_time=check_fre_time)
             state_fre_gt=state_transfer_re_gt.check_frequency_switch()
             state_dur_gt=state_transfer_re_gt.check_state_duration()
             state_detect_list_gt=[GT_one[0],GT_one[1],state_fre_gt,state_dur_gt]
+            
             state_final_gt=state_transfer_re_gt.transfer_state_mark(out_input=True,action=state_detect_list_gt) #useless now, just for reference
             detect_gt.append(state_final_gt)
             state_score_gt.update_state(state_final_gt)  
             state_transfer_re_gt.update_cur_state(state_final_gt) 
             state_detected_gt=state_final_gt
             #print(state_detected,state_detected_gt)
+            
             single_list_detected.append(state_detected)
             single_list_GT.append(state_detected_gt)
+            
             #print(state_detected,state_detected_gt)
         f=open(save_path,'w')
         for i in range(len(seg_list)):
