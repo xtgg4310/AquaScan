@@ -252,10 +252,10 @@ def motion_mark_generate(motion):
     else:
         return 'M'
 
-def re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,timestamp,time_thre,path): # resmooth the first 2 states when their following state changes. This design is due to lack of past information. To reduce the overhead, we have a strict re-smooth conditions to not easily trigger it. In most of cases, this will not be triggered so the latency of first 2 states will not increase.
+def re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,timestamp,time_thre,path): # resmooth the first 2 states when their following state changes. This function works after smoothing motion and movement. This design is proposed due to lack of past information. To reduce the overhead, we have a strict re-smooth conditions to not easily trigger it. In most of cases, this will not be triggered so the latency of first 2 states will not increase.
     if len(motion_flag_list)<3:
         return motion_flag_list
-    if (motion_flag_list[1]!=motion_flag_list_old[1] or motion_flag_list[2]!=motion_flag_list_old[2]) and timestamp[2]-timestamp[0]<=time_thre and motion_flag_list[0]!=motion_flag_list[1] and moving_flag_list[2]!="C" and moving_flag_list[1]!="C":
+    if (motion_flag_list[1]!=motion_flag_list_old[1] or motion_flag_list[2]!=motion_flag_list_old[2]) and timestamp[2]-timestamp[0]<=time_thre and motion_flag_list[0]!=motion_flag_list[1]: #and moving_flag_list[2]!="C" and moving_flag_list[1]!="C":
         #print(moving_flag_list[1],moving_flag_list[2])
         #return motion_flag_list
         change_first_flag=False
@@ -273,7 +273,7 @@ def re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,times
                 diff_count=0
                 same_count=0
                 for i in range(0,4):
-                    print("re",i)
+                    #print("re",i)
                     if motion_flag_list[i]==motion_flag_list[1]:
                         same_count+=1
                     else:
@@ -315,7 +315,7 @@ def read_har_file(path,time_thre):
         motion_flag_list_old.append(motion_single_old)
         seg_single=[float(data[5]),float(data[6]),float(data[7]),float(data[8])]
         seg_list.append(seg_single)
-    motion_flag_list=re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,timestamp,time_thre,path)
+    motion_flag_list=re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,timestamp,time_thre,path) # resmooth the first 2 states when their following state changes. This function works after smoothing motion and movement. This design is proposed due to lack of past information. To reduce the overhead, we have a strict re-smooth conditions to not easily trigger it. In most of cases, this will not be triggered so the latency of first 2 states will not increase.
     for i in range(len(motion_flag_list)):
         motion_feature_single=motion_mark_generate(motion_flag_list[i])
         motion_fea_list.append(motion_feature_single)
@@ -644,8 +644,8 @@ class swimmer_state:
         S_count=0
         if len(self.motion)<=self.length:
             for i in range(len(self.motion)):
-                if i == 0 and self.motion[i][1]==1:
-                    F=1
+                #if i == 0 and self.motion[i][1]==1: #the first frame can be considered or not due to lack of movement patterns
+                #    F=1
                 if self.motion[i][1]==1:
                     M_count+=1
                 else:
@@ -677,7 +677,7 @@ class swimmer_state:
                     S_count+=1
                 if i <= len(self.motion)-2:
                     if self.motion[i][1]==1 and self.motion[i+1][1] == 0:
-                        Motion_list.append(F) 
+                        Motion_list.append(F)
                         time_end=self.timestamp[i+bias]
                         time_list.append(time_end-time_start)
                         F=0
@@ -905,7 +905,7 @@ class state_transfer:
         frequency_score_ratio=frequency_score['latest']      
         if frequency_score_ratio==0:
             return self.dronwing_mark["Frequency"][1]
-        if frequency_score_ratio>=check_fre*0.95 and frequency_score['latest_time']>=self.check_fre_time*0.95: #frequency_score_ratio/check_fre is the 𝐹𝑚𝑜𝑡𝑖𝑜𝑛. 0.95 is the threshold.
+        if frequency_score_ratio>=check_fre*0.95 and frequency_score['latest_time']>=self.check_fre_time*0.95:
             return self.dronwing_mark["Frequency"][0]
         else:
             return self.dronwing_mark["Frequency"][1]     
@@ -998,7 +998,7 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
         check_fre_time=30.0
         read_har_single=har_dir+"/"+file
         save_path=save_dir+'/'+file
-        timestamp,moving_flag_list,moving_GT_list,motion_flag_list,motion_GT_list,seg_list=read_har_file(read_har_single,time_thre)
+        timestamp,moving_flag_list,moving_GT_list,motion_flag_list,motion_GT_list,seg_list=read_har_file(read_har_single,time_thre) # resmooth the first 2 states when their following state changes. This function works after smoothing motion and movement. This design is proposed due to lack of past information. To reduce the overhead, we have a strict re-smooth conditions to not easily trigger it. In most of cases, this will not be triggered so the latency of first 2 states will not increase.
         state_score=swimmer_state(state_list=[],length=40,time_per_frame=time_single,time_check=check_fre_time) 
         state_score_gt=swimmer_state(state_list=[],length=40,time_per_frame=time_single,time_check=check_fre_time) 
         state_detected=None
