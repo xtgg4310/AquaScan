@@ -27,7 +27,7 @@ def read_pos_results(file_path):
             raw_obj_y_max_sc=float(arr[13])
             raw_obj_x_min_sc=float(arr[14])
             raw_obj_x_max_sc=float(arr[15])
-            state=arr[16]
+            state=arr[16] #useless,just for reference
             seg_raw_sc=[raw_obj_y_min_sc,raw_obj_y_max_sc,raw_obj_x_min_sc,raw_obj_x_max_sc]
             raw_obj=[raw_obj_y_min,raw_obj_y_max,raw_obj_x_min,raw_obj_x_max]
             obj=[x_aver,y_aver,x_mid,y_mid,raw_obj,seg_raw_sc,state]
@@ -265,7 +265,7 @@ class TrackTree():
                 print(bottom_node.parent.obj.timestamp,bottom_node.parent.obj.positions,bottom_node.parent.obj.state_label)
                 print(" ")
                 
-            check_none_flag=False
+            check_none_flag=True # if you want to ignore the trace where all subjects are none (false detection), you can set it as False. This paper evaluates the detection and recognition seperately so the confusion metric shows the accuracy of detected subjects and the miss and false detection is evaluated seperately. A better way to is combine two metric together.
             temp_child=bottom_node
             trace_single=[]
             while temp_child!=None:
