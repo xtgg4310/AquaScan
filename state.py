@@ -1200,7 +1200,7 @@ def compare_metirc(gt_dir,detect_dir,moving_dir,time_single=2.57,target=[],targe
                 gt_sort.append(gt_single[max_index][1])
                 detect_sort.append(detect_label[i][1])
             else:
-                gt_sort.append("none")   # None is not shown in final results.
+                gt_sort.append("none")   # None is not shown in final results. It is better to combine object detection and activity recognition together. Current results are shown seperately. Confusion metric contains the GT of detected subjects and object detection show the miss and falsed detection. 
                 detect_sort.append(detect_label[i][1])
             match_list.append([detect_label[i],gt_single[max_index]])
             appear_detect.append([detect_label[i][0],detect_label[i][1],detect_label[i][2]])
