@@ -294,7 +294,7 @@ def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_di
         save_eval=save_eval_label_dir+"/"+scenario[i]
         dir_create(save_scenario)
         dir_create(save_eval)
-        sonars=os.listdir(gt_path_scenario)
+        sonars=os.listdir(data_path_scenario)
         if ".DS_Store" in sonars:
             sonars.remove(".DS_Store")
         for sonar in sonars:
@@ -305,7 +305,7 @@ def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_di
             save_eval_sonar=save_eval+"/"+sonar
             dir_create(save_sonar)
             dir_create(save_eval_sonar)
-            files = os.listdir(gt_path_sonar)
+            files = os.listdir(data_path_sonar)
             if ".DS_Store" in files:
                 files.remove(".DS_Store")
             files.sort(key=lambda x:np.int32(x.split('_')[1][:-4]))
