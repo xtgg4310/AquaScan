@@ -208,6 +208,6 @@ run the code:
 ```bash
 python cal_results.py
 ```
-
+cal_results.py provide two metric: one is generated from denoise_metric.py, which is for object detection. It reflects the false and miss detection and IoU. Another is from state.py, which is the recognition of activities detected in sonar system.
 
 
