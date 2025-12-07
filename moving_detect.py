@@ -339,7 +339,7 @@ def motion_detect_trace(loc_dict,pre_config=[],dis_min=[30,30],dis_max=[60,60],I
                 else:
                     dis_ratio=dis_count/dis
                 #print(dis_count)
-                if (iou>IoU_max[0] or iou_s>IoU_max[1]) and (dis<dis_min[0] or dis_count<dis_min[1]):
+                if (iou>IoU_max[0] or iou_s>IoU_max[1]) and (dis<dis_min[0] or dis_count<dis_min[1]):#there is a mistake in the paper, descrption in paper should be fixed as "and 𝐷 or 𝑑 below 𝐷_{𝑚𝑖𝑛} or 𝑑_{𝑚𝑖𝑛}". Low dis and dis_count means slight movement, which does not require to meet the requirement at the same time.
                     fail_dict.append(obj_single)
                     state_dict[key].append(['non-moving',obj_single])
                 else:   
