@@ -263,7 +263,7 @@ def moving_center_dis_trace(move_list):
     return dis,dis_count
     
 
-def motion_detect_trace(loc_dict,pre_config=[],dis_min=[30,30],dis_max=[60,60],IoU_max=[0.5,0.5],ratio=1.0):
+def motion_detect_trace(loc_dict,pre_config=[],dis_min=[30,30],dis_max=[60,60],IoU_max=[0.5,0.5],ratio=1.0): #unit of dis is cm
     fail_dict=[]
     sucess_dict=[]
     count_correct=0
