@@ -50,7 +50,7 @@ class Evaluator:
         pred_list=None
         self.model.eval()
         with torch.no_grad():
-            for i, (x, label, filename, scenario,file,human,sonar) in enumerate(self.val_loader):
+            for idx, (x, label, filename, scenario,file,human,sonar) in enumerate(self.val_loader):
                 #torch.no_grad()
                 #print(x.shape)
                 if self.enable_cuda:
@@ -58,8 +58,6 @@ class Evaluator:
                     label = label.cuda(non_blocking=True)
                 time_temp=time.time()
                 bsz = label.size(0)
-                #if i*bsz>=2:
-                #    break
                 pred = self.model(x)
                 bsz = label.size(0)
                 #print(bsz)
