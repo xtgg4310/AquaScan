@@ -29,8 +29,8 @@ class ClassifyDataset(Dataset):
         label2id = args.label2id
         self.sonar=[]
         if infe:
-            #label_paths.sort(key=lambda x:(x.split('/')[-1]).split('_')[1])
-            #data_paths.sort(key=lambda x:(x.split('/')[-1]).split('_')[1])
+            label_paths.sort(key=lambda x:(x.split('/')[-1]).split('_')[1])
+            data_paths.sort(key=lambda x:(x.split('/')[-1]).split('_')[1])
             pass
         else:
             label_paths.sort(key=lambda x:x.split('.')[0])
