@@ -98,8 +98,8 @@ def __skip_scanning__(image, skip, start_angle, end_angle, start, step):
         for j in range(skip):
             try:
                 # Set skipped rows in the image to 0
-                #image[i + j, :] = 0 #for test, can remove
-                skip_angle.append(i + j)
+                #image[i + j, :] = 0 #test version, can remove
+                skip_angle.append(i + j) 
             except IndexError:
                 # Safely handle out-of-bounds access
                 continue
@@ -127,13 +127,13 @@ def read_data(filename, skip, start, step):
     #     end_angle = 399
 
     # Initialize ground truth array
-    sonar_gt = np.zeros((len(sonar_data), len(sonar_data[0])))
+    sonar_gt = np.zeros((len(sonar_data), len(sonar_data[0]))) #useless now. this is for the test
     #for i in range(len(sonar_gt)):
     #    for j in range(len(sonar_gt[0])):
     #        sonar_gt[i][j] = np.float64(sonar_data[i][j])
 
     # Perform scanning with skipping
-    data_skip, info_total = __skip_scanning__(sonar_data, skip, start_angle, end_angle, start + start_angle, step)
+    data_skip, info_total = __skip_scanning__(sonar_data, skip, start_angle, end_angle, start + start_angle, step) #obtain the skipped angle
 
     # Initialize containers for results
     skip_data = []
@@ -143,7 +143,7 @@ def read_data(filename, skip, start, step):
 
     # Define the scanning object parameters
     obj = [start_angle, end_angle, 0, 500]
-    polar_data = data_skip[obj[0]:obj[1], obj[2]:obj[3]]
+    polar_data = sonar_data[obj[0]:obj[1], obj[2]:obj[3]]
     sonar_gt = sonar_gt[obj[0]:obj[1], obj[2]:obj[3]]
 
     # Append processed data to respective lists
@@ -593,10 +593,8 @@ def plot_error_bar(mse, labels, name="", save=False):
 
 
 def main():
-    # Raw data path
-    # 08071005，08141002，08213003-05，2292002，04，05
     parser = argparse.ArgumentParser(description="difference")
-    parser.add_argument("--raw", default='08213005', type=str, help="path of raw picture")
+    parser.add_argument("--raw", default='11111', type=str, help="path of raw picture")
     parser.add_argument("--save_txt", default='txt/', type=str, help="name of saving txt")
     parser.add_argument("--save_img", default='img/', type=str, help="name of saving picture")
     parser.add_argument("--skip", default= 2, type = int, help="skip angle")
