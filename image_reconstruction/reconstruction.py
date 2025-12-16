@@ -49,27 +49,6 @@ def read_txt(path, angle_range=400):
                 # print(sonar_data[int(angle)])
             # print(sonar_data.shape)
     return sonar_data, int(start_angle), int(end_angle)
-
-def read_mse_file(file_path):
-    """
-    Reads a file containing MSE values and converts them to a list of floats.
-
-    Args:
-        file_path (str): Path to the file containing MSE values.
-
-    Returns:
-        list: A list of MSE values as floats.
-    """
-    # Open the file for reading
-    with open(file_path, 'r') as f:
-        mse = []
-        lines = f.readlines()
-
-        # Convert each line to a float and append to the list
-        for line in lines:
-            mse.append(np.float64(line))
-
-    return mse
     
 def __skip_scanning__(image, skip, start_angle, end_angle, start, step):
     """
@@ -127,28 +106,29 @@ def read_data(filename, skip, start, step):
     #     end_angle = 399
 
     # Initialize ground truth array
-    sonar_gt = np.zeros((len(sonar_data), len(sonar_data[0]))) #useless now. this is for the test
+    #sonar_gt = np.zeros((len(sonar_data), len(sonar_data[0])))
     #for i in range(len(sonar_gt)):
     #    for j in range(len(sonar_gt[0])):
     #        sonar_gt[i][j] = np.float64(sonar_data[i][j])
 
     # Perform scanning with skipping
-    data_skip, info_total = __skip_scanning__(sonar_data, skip, start_angle, end_angle, start + start_angle, step) #obtain the skipped angle
-
+    data_skip, info_total = __skip_scanning__(sonar_data, skip, start_angle, end_angle, start + start_angle, step)
     # Initialize containers for results
     skip_data = []
-    ground_truth = []
+    #ground_truth = []
     info = []
     scheme = []
-
+    #start_angle=100
+    #end_angle=310
     # Define the scanning object parameters
+    #print(start_angle,end_angle)
     obj = [start_angle, end_angle, 0, 500]
     polar_data = sonar_data[obj[0]:obj[1], obj[2]:obj[3]]
-    sonar_gt = sonar_gt[obj[0]:obj[1], obj[2]:obj[3]]
+    #sonar_gt = sonar_gt[obj[0]:obj[1], obj[2]:obj[3]]
 
     # Append processed data to respective lists
     skip_data.append(polar_data)
-    ground_truth.append(sonar_gt)
+    #ground_truth.append(sonar_gt)
 
     # Process the info data
     info_temp = []
@@ -161,7 +141,7 @@ def read_data(filename, skip, start, step):
     scheme_temp = [skip, obj[0], step]
     scheme.append(scheme_temp)
 
-    return skip_data, ground_truth, info, scheme, start_angle, end_angle
+    return skip_data, [], info, scheme, start_angle, end_angle
 
 
 def obtain_kernal(data, flag, idx, kernel_size, x, y):
@@ -438,7 +418,7 @@ def skip_scan_recover(filename, label_path, skip, start, step, save_gt, save_dat
     return mse
 
 
-def obtain_reconstruction_mse(filename, label_path, mode, skip, start, step, dis, state):
+def obtain_reconstruction_mse(filename, label_path, mode, skip, start, step, dis, state): #non-normalize
     """
     Computes the Mean Squared Error (MSE) for image reconstruction across scenarios and saves the results.
 
@@ -640,7 +620,7 @@ def main():
 
                     # Modify the following settings to match your sonar configuration
                     
-                    data, ground_truth, info, scheme, start_angle, end_angle = read_data(filename, args.skip, args.offset, args.scan)
+                    data, _, info, scheme, start_angle, end_angle = read_data(filename, args.skip, args.offset, args.scan)
 
                     # Iterate over all data slices
                     for i in range(len(data)):
