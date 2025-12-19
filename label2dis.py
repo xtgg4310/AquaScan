@@ -261,7 +261,7 @@ def label2pos_seg(sonar_data,detect_obj,objs_gt,states,humans,dis):
                 iou_max=iou_temp
         x,y,x_mid,y_mid,polar_pos,obj,obj_scale=generate_loc(sonar_data,detect_obj[i],dis)
         if iou_max_index!=-1:
-            pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,states[iou_max_index],states[iou_max_index],humans[iou_max_index]]) #states[iou_max_index],states[iou_max_index],humans[iou_max_index]
+            pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,states[iou_max_index],humans[iou_max_index]]) #states[iou_max_index],states[iou_max_index],humans[iou_max_index]
         else:
             pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,"none","-1"])
     return pos_list
