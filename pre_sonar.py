@@ -361,7 +361,7 @@ def remove_line(data,threshold,distance):
     #define your pool line
     pass
 
-def data_rescale(data,threshold,distance=[500],re_size=[1600,2000],remove_type=0,pre=False):
+def data_rescale(data,threshold,distance=[500],re_size=[1200,1500],remove_type=0,pre=False):
     if len(threshold)!=len(distance):
         print("unalign-bg-noise-remove")
         return
