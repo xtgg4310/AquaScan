@@ -232,7 +232,7 @@ class SonarData():
     def __process_one_pic_multi_ch__(self, sonar_data_path, label_file_path, pic_save_dir_path, label_save_dir_path, sonar_str,file,scenario="2022",scenario_set="1.1.1.1",time_start=0.0,last_file=0,compare_method=1):
         ''' process one pic, and it will be split into many pics contains different objects.
             This function only works on multi channel (consider time axis)
-            Use IoU to get same object instead of human id.
+            Use IoU to get same object or use human id.
         Label file format:
             The label file is default format.
             For human object: human id | state_str | xmin | ymin | xmax | ymax
@@ -325,7 +325,7 @@ class SonarData():
         self.__checklen__()
         print(self.past_label_paths)
         #print(human_id_list, state_list, obj_list)
-        # Use IoU to get same object positions from past frames with the current frame
+        # Use IoU or human id to get same object positions from past frames with the current frame
         candidate_regions, candidate_datas = self.compare_objects()
         #print(candidate_datas[-1].shape)
         if candidate_regions is None and candidate_datas is None:
@@ -345,7 +345,7 @@ class SonarData():
         print(time.time()-time_start)
         print("\n")
     
-    def compare_objects_raw(self,bias=False,concat=False): #use for both training(bias and concat) and inferences
+    def compare_objects_raw(self,bias=False,concat=False): #use for both training and inferences
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
             while len(self.past_objects) < self.channels:
@@ -526,6 +526,7 @@ class SonarData():
                 last_candidate_data = candidate_datas[idx]
                 human_id=self.humans_id[-1][idx]
                 if last_obj is None:
+                    #print("none",human_id,i)
                     assert detect_flags[idx] == False
                     candidate_region, candidate_data = self.combine_objects(region, region, 
                                             last_candidate_data, empty_data)
@@ -567,7 +568,7 @@ class SonarData():
         return candidate_regions, candidate_datas
     
     '''
-    def compare_objects(self,bias=False,concat=False): for both training(bias and concat) and inference
+    def compare_objects(self,bias=False,concat=False): for both training and inference
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
             while len(self.past_objects) < self.channels:
