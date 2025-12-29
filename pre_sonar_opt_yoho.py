@@ -257,7 +257,7 @@ def data_pre(data, threshold, distance):
     #data_new=cv2.resize(data_new,(500,re_size[0]))
     return data_new
 
-def data_rescale(data,threshold,distance=[500],re_size=[1600,2000]):
+def data_rescale(data,threshold,distance=[500],re_size=[1200,1500]):
     if len(threshold)!=len(distance):
         print("unalign-bg-noise-remove")
         return
