@@ -692,18 +692,19 @@ class swimmer_state:
                     Motion_list.append(F)
                     time_end=self.timestamp[i+bias]
                     time_list.append(time_end-time_start)
-        if self.motion!=[]:
+        '''
+        if self.motion!=[]: 
             if self.motion[-1][1]==1:
                 Motion_list.append(F)
                 time_list.append(self.timestamp[-1]-time_start)
-                    
+        '''            
         length_check=0
         for i in range(len(self.timestamp)):
             if self.timestamp[len(self.timestamp)-1]-self.timestamp[len(self.timestamp)-i-1]<=self.time_check:
                 length_check+=1
             else:
                 break
-        if len(Motion_list)>0:
+        if len(Motion_list)>0: #mean, var is useless.
             frequency_dict={}
             frequency_dict.update({"frequency_score_list":Motion_list})
             frequency_dict.update({"latest":Motion_list[-1]})
