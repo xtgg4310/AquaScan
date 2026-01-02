@@ -704,7 +704,7 @@ class swimmer_state:
                 length_check+=1
             else:
                 break
-        if len(Motion_list)>0: #mean, var is useless.
+        if len(Motion_list)>0: ##There is a correction for the paper. The F_motion should be the duration not the average duration since average duration is meanless for current state. Besides, since the threshold is 0.95 for 30s time window, only when the subjects in continuous motion will be recognized as struggling.
             frequency_dict={}
             frequency_dict.update({"frequency_score_list":Motion_list})
             frequency_dict.update({"latest":Motion_list[-1]})
