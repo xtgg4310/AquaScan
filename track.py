@@ -1,7 +1,6 @@
 import numpy as np
 import os
 import argparse
-import random
 
 def dir_create(dir):
     if not os.path.exists(dir):
