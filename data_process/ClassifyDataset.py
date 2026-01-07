@@ -1,7 +1,6 @@
 from torch.utils.data import Dataset
 import numpy as np
 import data_process.augment as augment
-import random
 import cv2
 import os
 
@@ -14,7 +13,6 @@ class ClassifyDataset(Dataset):
             data_list = args.val_list
         #print(args.val_list)
         infos = [line.split() for line in open(data_list).readlines()]
-        random.shuffle(infos)
         #print(infos)
         data_paths = [info[0] for info in infos]
         label_paths = [info[1] for info in infos]
