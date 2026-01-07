@@ -324,9 +324,6 @@ if __name__ == '__main__':
                     )
                     p.wait_message([definitions.PING360_DEVICE_DATA], 0.5) #wait_message works to allow sonar to transmit the data within the largest time(here is 0.5). It is a function in ROS. there is no docu for wait_message now, if you worry about this function , you can use ping360 document to check new functions
                     new_message = [int(j) for j in p._data]
-                # else:
-                #     # fake data
-                #     new_message = np.random.random((number_sample))*1
                     fileObject.write(str(scanning_angle[i])+" ")
                     for j in range(len(new_message)):
                         fileObject.write(str(new_message[j])+" ")
@@ -362,9 +359,6 @@ if __name__ == '__main__':
                     )
                     p.wait_message([definitions.PING360_DEVICE_DATA], 0.5)
                     new_message = [int(j) for j in p._data]
-                # else:
-                #     # fake data
-                #     new_message = np.random.random((number_sample))*1
                     fileObject.write(str(scanning_angle[i])+" ")
                     for j in range(len(new_message)):
                         fileObject.write(str(new_message[j])+" ")
@@ -439,9 +433,6 @@ if __name__ == '__main__':
                     )
                     p.wait_message([definitions.PING360_DEVICE_DATA], 0.5)
                     new_message = [int(j) for j in p._data]
-                # else:
-                #     # fake data
-                #     new_message = np.random.random((number_sample))*1
                     fileObject.write(str(scanning_angle[i])+" ")
                     for j in range(len(new_message)):
                         fileObject.write(str(new_message[j])+" ")
