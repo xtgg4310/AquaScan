@@ -45,7 +45,7 @@ class Option:
     train_list: str = ''
     batch_size: int = 128
     epochs: int = 500
-    augment_type: str = 'random'
+    augment_type: str = 'none'
     print_freq: int = 100
     freeze_layers: List[str] = field(default_factory=list)
 
