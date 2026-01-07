@@ -47,7 +47,7 @@ def parse_train_args(parser):
     parser.add_argument('--model_dir', type=str, default='', help='leave blank, auto generated')
     parser.add_argument('--train_list', type=str, default='/data/dataset1/list/classify/train.txt')
     parser.add_argument('--batch_size', type=int, default=16)
-    parser.add_argument('--augment_type', type=str, default='random')
+    parser.add_argument('--augment_type', type=str, default='none')
     parser.add_argument('--epochs', type=int, default=500)
     return parser
 
