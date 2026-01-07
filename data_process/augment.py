@@ -30,7 +30,4 @@ def get_transforms(transform_type):
         ]),
         'totensor': transforms.ToTensor(),
     }
-    if transform_type == 'two_crop': 
-        return TwoCropTransform(data_transforms['clean_random'])
-
     return data_transforms[transform_type]
