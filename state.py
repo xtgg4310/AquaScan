@@ -268,7 +268,7 @@ def re_smooth_start(motion_flag_list,motion_flag_list_old,moving_flag_list,times
         if change_first_flag:
             print("changed_1",path)
         if change_first_flag: #and moving_flag_list[1]!="C":    
-            if len(motion_flag_list)>3 and motion_flag_list[1]!=motion_flag_list[2] and motion_flag_list[1]!=motion_flag_list[3] :
+            if len(motion_flag_list)>3 and timestamp[3]-timestamp[1]<=time_thre and motion_flag_list[1]!=motion_flag_list[2] and motion_flag_list[1]!=motion_flag_list[3] :
                 stat_diff=0
                 diff_count=0
                 same_count=0
