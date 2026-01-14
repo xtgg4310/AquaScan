@@ -291,10 +291,10 @@ def motion_detect_trace(loc_dict,pre_config=[],dis_min=[30,30],dis_max=[60,60],I
             if moving_list==[]:
                 start_time=loc_dict[key][0][i]
                 moving_list.append([loc_dict[key][0][i],loc_dict[key][1][i],loc_dict[key][2][i],loc_dict[key][3][i]])#timestamp,pos,seg,state
-            elif loc_dict[key][0][i]-start_time<time_threshold:
+            elif loc_dict[key][0][i]-start_time<time_threshold: #and len(moving_list)<6
                 moving_list.append([loc_dict[key][0][i],loc_dict[key][1][i],loc_dict[key][2][i],loc_dict[key][3][i]])
             else:
-                while loc_dict[key][0][i]-start_time>time_threshold:
+                while loc_dict[key][0][i]-start_time>time_threshold: #len(moving_list)>6
                     if moving_list!=[]:
                         moving_list.pop(0)
                     if moving_list!=[]:
@@ -391,8 +391,8 @@ def state_smooth(state_dict,len_win,smooth_cfg=[]):
                 if state_dict[key][2][0]!=state_dict[key][1][0]:
                     if np.float32(state_dict[key][3][1][0])-np.float32(state_dict[key][2][1][0])>time_threshold:
                         continue
-                    if np.float32(state_dict[key][2][1][0])-np.float32(state_dict[key][1][1][0])>time_threshold_past and state_dict[key][1][1][0]=="moving":
-                        continue
+                    #if np.float32(state_dict[key][2][1][0])-np.float32(state_dict[key][1][1][0])>time_threshold_past and state_dict[key][1][1][0]=="moving": #use past information will not add extra overhead
+                    #    continue
                     else:
                         if state_dict[key][1][0]==state_dict[key][3][0]:
                             if len(state_dict[key])>=5:
@@ -422,8 +422,8 @@ def state_smooth(state_dict,len_win,smooth_cfg=[]):
                             continue
                         #print(np.float32(state_dict[key][i][1][0])-np.float32(state_dict[key][i+k][1][0]),)
 
-                        if k<0 and np.float32(state_dict[key][i][1][0])-np.float32(state_dict[key][i+k][1][0])>time_threshold_past and state_dict[key][i][1][0]=="moving":
-                            continue
+                        #if k<0 and np.float32(state_dict[key][i][1][0])-np.float32(state_dict[key][i+k][1][0])>time_threshold_past and state_dict[key][i][1][0]=="moving":
+                        #    continue
                         if k>0 and np.float32(state_dict[key][i+k][1][0])-np.float32(state_dict[key][i][1][0])>time_threshold:
                             #print(k,np.float32(state_dict[key][i+k][1][0]))
                             if k==1 and state_dict[key][i-2][0]!=state_dict[key][i-3][0]:
@@ -455,8 +455,8 @@ def state_smooth(state_dict,len_win,smooth_cfg=[]):
                         if i+k<0:
                             #print(i+k,k)
                             continue
-                        if k<0 and np.float32(state_dict[key][i][1][0])-np.float32(state_dict[key][i+k][1][0])>time_threshold_past and state_dict[key][i][1][0]=="moving":
-                            continue
+                        #if k<0 and np.float32(state_dict[key][i][1][0])-np.float32(state_dict[key][i+k][1][0])>time_threshold_past and state_dict[key][i][1][0]=="moving":
+                        #    continue
                         if k>0 and np.float32(state_dict[key][i+k][1][0])-np.float32(state_dict[key][i][1][0])>time_threshold:
                             if k==1 and state_dict[key][i-2][0]!=state_dict[key][i-3][0]:
                                 continue
