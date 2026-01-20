@@ -45,7 +45,7 @@ def read_result(file_path):
     #objs=list(set(objs))
     return objs
 
-def cal_IoU(obj1, obj2, only_label=False):
+def cal_IoU(obj1, obj2, flag=False):
     cross_area=[max(obj1[0],obj2[0]),min(obj1[1],obj2[1]),max(obj1[2],obj2[2]),min(obj1[3],obj2[3])]
     cross=0
     if cross_area[0]>=cross_area[1] or cross_area[2]>=cross_area[3]:
@@ -168,7 +168,7 @@ def generate_miss_iou_map(detected_obj,label_obj):
         if max_iou!=0:
             miss_re[max_index[0]]=0
             correct_re[max_index[0]]=max_iou
-            correct_re_label[max_index[0]]=cal_IoU(detected_obj[max_index[1]],label_obj[max_index[0]],True)
+            correct_re_label[max_index[0]]=cal_IoU(detected_obj[max_index[1]],label_obj[max_index[0]],False)
             record_label.append(max_index[0])
             record_id.append(max_index[1])
             miss_iou_map[max_index[0],:]=0
