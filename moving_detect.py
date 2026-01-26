@@ -536,7 +536,7 @@ def read_data_trace(data_dir,print_flag=False,pre_config=[],smooth_cfg=[],dis_mi
     #print(correct,count,correct*1.0/count)
     #print(correct_mov,count_mov,correct_mov*1.0/count_mov)
     #print(correct_no,count_no,correct_no*1.0/count_no)
-    return state_dict
+    return state_dict_filter
     
 def save_moving_detection_result(state_dict, save_dir):
     dir_create(save_dir)
