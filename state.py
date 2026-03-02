@@ -559,18 +559,19 @@ class swimmer_state:
         self.timestamp.append(timestamp)
         
     def state_smooth(self,windows,step): #useless methods, please drop it.
-        motion_filter=[]
-        re_motion=np.array(self.motion)
-        for i in range(0,len(self.motion),step):
-            if i-np.int32(windows/2.0)<0 or i-np.int32(windows/2.0):
-                motion_filter.append(self.motion[i])
-            else:
-                data=[0,0]
-                data[0]=np.mean(re_motion[i-np.int32(windows/2.0):i-np.int32(windows/2.0)][0])
-                data[1]=np.mean(re_motion[i-np.int32(windows/2.0):i-np.int32(windows/2.0)][1])
-                motion_filter.append(data)
+        pass
+        #motion_filter=[]
+        #re_motion=np.array(self.motion)
+        #for i in range(0,len(self.motion),step):
+        #    if i-np.int32(windows/2.0)<0 or i-np.int32(windows/2.0):
+        #        motion_filter.append(self.motion[i])
+        #    else:
+        #        data=[0,0]
+        #        data[0]=np.mean(re_motion[i-np.int32(windows/2.0):i-np.int32(windows/2.0)][0])
+        #        data[1]=np.mean(re_motion[i-np.int32(windows/2.0):i-np.int32(windows/2.0)][1])
+        #        motion_filter.append(data)
                 
-        self.motion=motion_filter
+        #self.motion=motion_filter
         
     def update_timestamp(self,time):
         self.timestamp.append(time)
