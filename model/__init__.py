@@ -11,14 +11,6 @@ def select_model(args):
         raise NotImplementedError
     return model
 
-def select_detect_model(args):
-    if args.model_detect_type == 'res18_linear':
-        model = resnet_linear(in_channel=args.channel_detect_num, num_classes=args.num_detect_classes, name='resnet18')
-    else:
-        raise NotImplementedError
-    return model
-
-
 def equip_multi_gpu(model, args):
     model = nn.DataParallel(model, device_ids=args.gpus)
     return model
