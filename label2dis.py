@@ -252,18 +252,18 @@ def generate_loc(sonar,obj,dis=17.0):
 def label2pos_seg(sonar_data,detect_obj,objs_gt,states,humans,dis):
     pos_list=[]
     for i in range(len(detect_obj)):
-        iou_max=0.0
-        iou_max_index=-1
-        for j in range(len(objs_gt)):
-            iou_temp=cal_IoU(objs_gt[j],detect_obj[i][4])
-            if iou_temp>iou_max:
-                iou_max_index=j
-                iou_max=iou_temp
+        #iou_max=0.0
+        #iou_max_index=-1
+        #for j in range(len(objs_gt)):
+        #    iou_temp=cal_IoU(objs_gt[j],detect_obj[i][4])
+        #    if iou_temp>iou_max:
+        #        iou_max_index=j
+        #        iou_max=iou_temp
         x,y,x_mid,y_mid,polar_pos,obj,obj_scale=generate_loc(sonar_data,detect_obj[i],dis)
-        if iou_max_index!=-1:
-            pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,states[iou_max_index],humans[iou_max_index]]) #states[iou_max_index],states[iou_max_index],humans[iou_max_index]
-        else:
-            pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,"none","-1"])
+        #if iou_max_index!=-1:
+        pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,"ref","-1"]) #states[iou_max_index],states[iou_max_index],humans[iou_max_index]
+        #else:
+        #    pos_list.append([x,y,x_mid,y_mid,polar_pos,obj,obj_scale,"none","-1"])
     return pos_list
 
 def write_pos(pos,save_file):
@@ -339,7 +339,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, required=True, help="data_path")
     parser.add_argument("--detect",type=str, required=True, help="label_path")
-    parser.add_argument("--gt",type=str, required=True, help="gt_path")
+    parser.add_argument("--gt",type=str, required=True, help="gt_path") #useless only for reference
     parser.add_argument("--type",type=int, required=True, help="data_type")
     parser.add_argument("--remove",type=int, required=True, help="data_type")
     parser.add_argument("--dis",type=int, required=True, help="dis")
