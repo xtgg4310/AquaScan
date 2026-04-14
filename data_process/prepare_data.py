@@ -4,7 +4,6 @@ from tqdm import tqdm
 import cv2
 import math, cmath
 from copy import deepcopy
-import random
 import time
 
 def dir_create(dir):
@@ -283,7 +282,7 @@ class SonarData():
         self.past_label_paths.append(label_file_path)
         self.__checklen__()
         if compare_method==0:
-            candidate_regions, candidate_datas = self.compare_objects_raw()
+            candidate_regions, candidate_datas = self.compare_objects()
         else:
             candidate_regions, candidate_datas = self.compare_objects()
         if candidate_regions is None and candidate_datas is None:
@@ -344,7 +343,7 @@ class SonarData():
             self.save_file_idx += 1 
         print(time.time()-time_start)
         print("\n")
-    
+    '''
     def compare_objects_raw(self,bias=False,concat=False): #use for both training and inferences
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         if not concat:
@@ -492,7 +491,7 @@ class SonarData():
                     detect_flags[idx] = False
         
         return candidate_regions, candidate_datas
-        
+    '''
     def compare_objects(self): #only for inference
         empty_data = np.zeros_like(self.past_sonar_datas[-1])
         while len(self.past_objects) < self.channels:
