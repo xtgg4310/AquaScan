@@ -302,15 +302,15 @@ def read_har_file(path,time_thre):
         data=line.split(',')
         time_single=float(data[0])
         moving_single=moving_generate_mark(data[1])
-        moving_single_GT=moving_generate_mark(data[2])
+        #moving_single_GT=moving_generate_mark(data[2])
         #motion_single=motion_mark_generate(int(data[3]))
         motion_single=int(data[3])
-        motion_single_GT=motion_mark_generate(int(data[4]))
+        #motion_single_GT=motion_mark_generate(int(data[4]))
         timestamp.append(time_single)
         moving_flag_list.append(moving_single)
-        moving_GT_list.append(moving_single_GT)
+        #moving_GT_list.append(moving_single_GT)
         motion_flag_list.append(motion_single)
-        motion_GT_list.append(motion_single_GT)
+        #motion_GT_list.append(motion_single_GT)
         motion_single_old=float(data[9])
         motion_flag_list_old.append(motion_single_old)
         seg_single=[float(data[5]),float(data[6]),float(data[7]),float(data[8])]
@@ -1002,7 +1002,7 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
         save_path=save_dir+'/'+file
         timestamp,moving_flag_list,moving_GT_list,motion_flag_list,motion_GT_list,seg_list=read_har_file(read_har_single,time_thre) # resmooth the first 2 states when their following state changes. This function works after smoothing motion and movement. This design is proposed due to lack of past information. To reduce the overhead, we have a strict re-smooth conditions to not easily trigger it. In most of cases, this will not be triggered so the latency of first 2 states will not increase.
         state_score=swimmer_state(state_list=[],length=40,time_per_frame=time_single,time_check=check_fre_time) 
-        state_score_gt=swimmer_state(state_list=[],length=40,time_per_frame=time_single,time_check=check_fre_time) 
+        #state_score_gt=swimmer_state(state_list=[],length=40,time_per_frame=time_single,time_check=check_fre_time) 
         state_detected=None
         state_detected_gt=None    
         single_list_detected=[]
@@ -1028,7 +1028,7 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
             state_score.update_state(state_final)  
             state_transfer_re.update_cur_state(state_final) 
             state_detected=state_final
-                
+            '''   
             state_score_gt.update_features(GT_one,timestamp[i],moving_GT_list[i]) #only for reference, not used for inference and metric calculation, you can even randomly input the gt.
             fre_info_gt,duration_gt,duration_ratio_gt=state_score_gt.frequency_score,state_score_gt.duration,state_score_gt.duration_ratio
             state_transfer_re_gt=state_transfer(cur_state=state_detected_gt,frequency=fre_info_gt,duration=duration_gt,duration_ratio=duration_ratio_gt,state=state,check_fre=check_fre,time_frame=time_single,check_fre_time=check_fre_time)
@@ -1040,7 +1040,9 @@ def eval_all(har_dir,save_dir,cfg_har=[]):
             detect_gt.append(state_final_gt)
             state_score_gt.update_state(state_final_gt)  
             state_transfer_re_gt.update_cur_state(state_final_gt) 
-            state_detected_gt=state_final_gt
+            ''' 
+            state_detected_gt="ref"  
+            #state_final_gt
             #print(state_detected,state_detected_gt)
             
             single_list_detected.append(state_detected)
@@ -1154,7 +1156,7 @@ def overall(martix):
     return correct*1.0/count_all
 
 
-def compare_metirc(gt_dir,detect_dir,moving_dir,time_single=2.57,target=[],target_file=[],dis=13.0,label_type=0,sampel_time=90,gt_config=[]): #time_single is useless now
+def compare_metirc(gt_dir,detect_dir,moving_dir,time_single=2.57,target=[],target_file=[],dis=0.0,label_type=0,sampel_time=90,gt_config=[]): #time_single and dis is useless now
     #dis is useless now. 
     state=['moving','motionless','patting','struggling','drowning']
     gt_dataset,gt_dict=generate_gt_label(gt_dir,time_single,target,label_type,gt_config)
