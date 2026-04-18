@@ -97,7 +97,8 @@ def read_trace_single(file):
         elif raw_state=="none":
             state_single="none"
         else:
-            state_single="non-moving"
+            state_single="non-moving"、
+        state_single="ref"
         raw_state=line[7][:-1]
         state_single_list=[state_single,raw_state]
         timestamp.append(time)
