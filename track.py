@@ -26,7 +26,7 @@ def read_pos_results(file_path):
             raw_obj_y_max_sc=float(arr[13])
             raw_obj_x_min_sc=float(arr[14])
             raw_obj_x_max_sc=float(arr[15])
-            state=arr[16] #useless,just for reference
+            state="ref" #arr[16] #useless,just for reference
             seg_raw_sc=[raw_obj_y_min_sc,raw_obj_y_max_sc,raw_obj_x_min_sc,raw_obj_x_max_sc]
             raw_obj=[raw_obj_y_min,raw_obj_y_max,raw_obj_x_min,raw_obj_x_max]
             obj=[x_aver,y_aver,x_mid,y_mid,raw_obj,seg_raw_sc,state]
