@@ -128,78 +128,15 @@ def resnet18(**kwargs):
     return ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
 
 
-def resnet34(**kwargs):
-    return ResNet(BasicBlock, [3, 4, 6, 3], **kwargs)
-
-
-def resnet50(**kwargs):
-    return ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
-
-
-def resnet101(**kwargs):
-    return ResNet(Bottleneck, [3, 4, 23, 3], **kwargs)
-
-
 model_dict = {
     'resnet18': [resnet18, 512],
-    'resnet34': [resnet34, 512],
-    'resnet50': [resnet50, 2048],
-    'resnet101': [resnet101, 2048],
 }
 
-
-class LinearBatchNorm(nn.Module):
-    """Implements BatchNorm1d by BatchNorm2d, for SyncBN purpose"""
-    def __init__(self, dim, affine=True):
-        super(LinearBatchNorm, self).__init__()
-        self.dim = dim
-        self.bn = nn.BatchNorm2d(dim, affine=affine)
-
-    def forward(self, x):
-        x = x.view(-1, self.dim, 1, 1)
-        x = self.bn(x)
-        x = x.view(-1, self.dim)
-        return x
-
-
-class SupConResNet(nn.Module):
-    """backbone + projection head"""
-    def __init__(self, in_channel=3, name='resnet50', head='mlp', feat_dim=128):
-        super(SupConResNet, self).__init__()
-        model_fun, dim_in = model_dict[name]
-        self.encoder = model_fun(in_channel=in_channel)
-        if head == 'linear':
-            self.head = nn.Linear(dim_in, feat_dim)
-        elif head == 'mlp':
-            self.head = nn.Sequential(
-                nn.Linear(dim_in, dim_in),
-                nn.ReLU(inplace=True),
-                nn.Linear(dim_in, feat_dim)
-            )
-        else:
-            raise NotImplementedError(
-                'head not supported: {}'.format(head))
-
-    def forward(self, x):
-        feat = self.encoder(x)
-        feat = F.normalize(self.head(feat), dim=1)
-        return feat
-
-
-class SupCEResNet(nn.Module):
-    """encoder + classifier"""
-    def __init__(self, name='resnet50', num_classes=10):
-        super(SupCEResNet, self).__init__()
-        model_fun, dim_in = model_dict[name]
-        self.encoder = model_fun()
-        self.fc = nn.Linear(dim_in, num_classes)
-
-    def forward(self, x):
-        return self.fc(self.encoder(x))
     
 class resnet_linear(nn.Module):
     def __init__(self, name, in_channel, num_classes):
         super(resnet_linear, self).__init__()
+        print("cur",name)
         model_fun, dim_in = model_dict[name]
         self.resnet = model_fun(in_channel=in_channel)
         print(dim_in)
@@ -211,4 +148,7 @@ class resnet_linear(nn.Module):
         
         return self.fc(features)
     
+    
+
+
  
