@@ -109,92 +109,92 @@ class Trainer:
             #self.logger.save_check_point(self.model, epoch)
         self.file_name.close()
         self.file_name_test.close()
-    def train_per_epoch(self, epoch):
-        # switch to train mode
-        self.model.train()
         
+    def train_per_epoch(self, epoch):# modify train and val epoch
+        self.model.train()
         losses = AverageMeter()
-        acc = AverageMeter()
-        recall = AverageMeter()
-        precision = AverageMeter()
-
+        total_correct = 0
+        total_samples = 0
+        TP = 0
+        FP = 0
+        FN = 0
         for i, (x, label, filename, info, human) in enumerate(self.train_loader):
-            #print(label)
+    
             if self.enable_cuda:
                 x = x.cuda(non_blocking=True)
                 label = label.cuda(non_blocking=True)
-            #print(x.shape)
-            pred = self.model(x)
-            bsz = label.size(0)
-            #print(pred)
-            # get the loss            
-            loss = self.criterion(pred, label)
-            losses.update(loss.item(), bsz)
-
-            # warmup learning rate
-            torch_utils.warmup_learning_rate(self.args, epoch, i, len(self.train_loader), self.optimizer)
-        
-            # backward
+    
             self.optimizer.zero_grad()
+    
+            pred = self.model(x)
+            loss = self.criterion(pred, label)
+    
             loss.backward()
             self.optimizer.step()
-            
-            metrics = self.compute_metrics(pred, label)
-            acc.update(metrics['acc'], bsz)
-            recall.update(metrics['recall'], bsz)
-            precision.update(metrics['precision'], bsz)
+    
+            bsz = label.size(0)
+            losses.update(loss.item(), bsz)
+    
+            pred_label = pred.argmax(dim=1)
 
-            #wandb.log({'train_loss':losses.avg, 'train_acc':acc.avg, 'train_recall':recall.avg, 'train_precision':precision.avg})
-            # monitor training progress
+            total_correct += (pred_label == label).sum().item()
+            total_samples += bsz
+
+            TP += ((pred_label == 1) & (label == 1)).sum().item()
+            FP += ((pred_label == 1) & (label == 0)).sum().item()
+            FN += ((pred_label == 0) & (label == 1)).sum().item()
+    
             if i % self.args.print_freq == 0:
-                # self.logger.save_imgs(x, pred.argmax(dim=1), label, filename, True)
-                print(  'Train: [{0}][{1}/{2}]\t'
-                        'loss {loss.val:.3f} ({loss.avg:.3f})\t'
-                        'Acc@1 {top1.val:.3f} ({top1.avg:.3f})'
-                        .format(epoch, i + 1, len(self.train_loader), loss=losses, top1=acc))
-                #log_device_usage()
-                sys.stdout.flush()
-        record=str(epoch)+" acc:"+str(acc.avg)+" recall:"+str(recall.avg)+" precision:"+str(precision.avg)+"\n"
+                print(f"Train: [{epoch}][{i+1}/{len(self.train_loader)}]\t"
+                      f"loss {losses.val:.3f} ({losses.avg:.3f})")
+
+        acc = total_correct / total_samples
+        precision = TP / (TP + FP + 1e-8)
+        recall = TP / (TP + FN + 1e-8)
+    
+        record = f"{epoch} acc:{acc} recall:{recall} precision:{precision}\n"
         self.file_name.writelines(record)
-        
+            
         
     def val_per_epoch(self, epoch):
         self.model.eval()
-        acc = AverageMeter()
-        recall = AverageMeter()
         losses = AverageMeter()
-        precision = AverageMeter()
+        total_correct = 0
+        total_samples = 0
+        TP = 0
+        FP = 0
+        FN = 0
         with torch.no_grad():
             for i, (x, label, filename, info, human) in enumerate(self.val_loader):
+    
                 if self.enable_cuda:
                     x = x.cuda(non_blocking=True)
                     label = label.cuda(non_blocking=True)
+    
                 pred = self.model(x)
-                bsz = label.size(0)
-
-                # compute loss
                 loss = self.criterion(pred, label)
+    
+                bsz = label.size(0)
                 losses.update(loss.item(), bsz)
-
-                # compute performance
-                metrics = self.compute_metrics(pred, label)
-                acc.update(metrics['acc'], bsz)
-                recall.update(metrics['recall'], bsz)
-                precision.update(metrics['precision'], bsz)
-                #print(acc.avg,acc.val,bsz)
-                #wandb.log({'val_loss':losses.avg, 'val_acc':acc.avg, 'val_recall':recall.avg, 'val_precision':precision.avg})
-                # monitor training progress
-                if i % self.args.print_freq == 0:
-                    # self.logger.save_imgs(x, pred.argmax(dim=1), label, filename, False)
-                    print(  'Test: [{0}][{1}/{2}]\t'
-                            'loss {loss.val:.3f} ({loss.avg:.3f})\t'
-                            'Acc@1 {top1.val:.3f} ({top1.avg:.3f})'
-                            .format(epoch, i + 1, len(self.val_loader), loss=losses, top1=acc))
-                    #log_device_usage()
-        self.temp_acc=acc.avg
-        self.temp_pre=precision.avg
-        self.temp_re=recall.avg
-        record=str(epoch)+" acc:"+str(acc.avg)+" recall:"+str(recall.avg)+" precision:"+str(precision.avg)+"\n"
+    
+                pred_label = pred.argmax(dim=1)
+    
+                total_correct += (pred_label == label).sum().item()
+                total_samples += bsz
+    
+                TP += ((pred_label == 1) & (label == 1)).sum().item()
+                FP += ((pred_label == 1) & (label == 0)).sum().item()
+                FN += ((pred_label == 0) & (label == 1)).sum().item()
+        acc = total_correct / total_samples
+        precision = TP / (TP + FP + 1e-8)
+        recall = TP / (TP + FN + 1e-8)
+    
+        # 更新最优判断用变量
+        self.temp_acc = acc
+        self.temp_pre = precision
+        self.temp_re = recall
+    
+        record = f"{epoch} acc:{acc} recall:{recall} precision:{precision}\n"
         self.file_name_test.writelines(record)
         
     def compute_metrics(self, pred, gt):
