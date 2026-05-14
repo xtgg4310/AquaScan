@@ -264,17 +264,14 @@ class TrackTree():
                 print(bottom_node.parent.obj.timestamp,bottom_node.parent.obj.positions,bottom_node.parent.obj.state_label)
                 print(" ")
                 
-            check_none_flag=True # if you want to ignore the trace where all subjects are none (false detection), you can set it as False. This paper evaluates the detection and recognition seperately so the confusion metric shows the accuracy of detected subjects and the miss and false detection is evaluated seperately. A better way to is combine two metric together.
+            #check_none_flag=True # if you want to ignore the trace where all subjects are none (false detection), you can set it as False. This paper evaluates the detection and recognition seperately so the confusion metric shows the accuracy of detected subjects and the miss and false detection is evaluated seperately. A better way to is combine two metric together.
             temp_child=bottom_node
             trace_single=[]
             while temp_child!=None:
                 trace_single.append([temp_child.obj.timestamp,temp_child.obj.positions,temp_child.obj.seg,temp_child.obj.state_label,temp_child.obj.frame_id])
-                if temp_child.obj.state_label!="None" and temp_child.obj.state_label!="none":
-                    check_none_flag=True
                 temp_child=temp_child.parent
-            if check_none_flag:
-                trace_single.reverse()
-                trace.append(trace_single)
+            trace_single.reverse()
+            trace.append(trace_single)
         
         return trace
             
