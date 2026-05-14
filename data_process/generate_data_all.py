@@ -50,7 +50,7 @@ def file_combine(path_1,path_2,new_file,file_name):
             f.write("{} {}\n".format(data_paths_2[idx], label_paths_2[idx]))
     f.close()
                             
-def main_eval(data_read_path,label_read_path,save_read_path,save_file_name): #modify the name of variable
+def main_eval(data_read_path,label_read_path,save_read_path,save_file_name):
     data_path=data_read_path
     label_path=label_read_path  
     save_data=save_read_path
@@ -73,9 +73,9 @@ def main_eval(data_read_path,label_read_path,save_read_path,save_file_name): #mo
     save_data_path="./data_process/datalist_"+save_file_name+"/datalist.txt"
     gen_data_dir="./data_process/datalist_generate_"+save_file_name
     dir_create(gen_data_dir)
-    gen_data_path="./data_process/datalist_generat_"+save_file_name
+    gen_data_path="./data_process/datalist_generate_"+save_file_name
     gdata.save_list_all(save_data_path,dataset_list)
-    sdata.split_datalist_save(save_data_path,gen_data_path,save_file_name)
+    sdata.all_datalist_save(save_data_path,gen_data_path,save_file_name)
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
