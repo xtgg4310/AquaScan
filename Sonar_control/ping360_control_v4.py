@@ -7,7 +7,7 @@ from sonar_display import show_sonar
 from data import *
 import matplotlib.pyplot as plt
 import matplotlib
-import Track_scan
+import Scan
 import os
 from sonar_display import *
 from datetime import datetime
@@ -301,7 +301,7 @@ if __name__ == '__main__':
         end_angle = args.end
         scan_continue = args.step
         skipping = args.skip
-        scanning_angle = Track_scan.ignore_scanning_scheme(start_angle, stop_angle, scan_continue, skipping)
+        scanning_angle = Scan.ignore_scanning_scheme(start_angle, stop_angle, scan_continue, skipping)
         count = 0
         while count < total_count:
             print(count)
@@ -343,7 +343,7 @@ if __name__ == '__main__':
             txt_save_path = os.path.join(path_save_data + str(args.mode) +"/" ,  batch_id, 'sonar' + sonar_num)
             os.makedirs(txt_save_path, exist_ok=True)
             fileObject = open("mode_"+ str(args.mode) +"/"+ batch_id + '/sonar'+ sonar_num + '/'+ local_time+ '_'+ str(count) + '.txt', 'w')
-            scanning_angle = Track_scan.back_forth_scanning_scheme(start_angle, end_angle, scan_step, count)
+            scanning_angle = Scan.back_forth_scanning_scheme(start_angle, end_angle, scan_step, count)
             for i in range(len(scanning_angle)):
                 # if args.data:
                     p.control_transducer(
@@ -413,9 +413,9 @@ if __name__ == '__main__':
             os.makedirs(txt_save_path, exist_ok=True)
             fileObject = open("mode_"+ str(args.mode) +"/"+ batch_id + '/sonar'+ sonar_num + '/'+ local_time+ '_'+ str(count) + '.txt', 'w')
             if count%2 == 0:
-                scanning_angle = Track_scan.ignore_scanning_scheme(start_angle, stop_angle, scan_continue, skipping)
+                scanning_angle = Scan.ignore_scanning_scheme(start_angle, stop_angle, scan_continue, skipping)
             else:
-                scanning_angle = Track_scan.ignore_scanning_scheme(start_angle, stop_angle, scan_continue, skipping)
+                scanning_angle = Scan.ignore_scanning_scheme(start_angle, stop_angle, scan_continue, skipping)
                 scanning_angle.reverse()
 
             for i in range(len(scanning_angle)):
