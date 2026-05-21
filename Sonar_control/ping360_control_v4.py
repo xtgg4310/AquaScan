@@ -78,7 +78,7 @@ def rescan(former_object, distance, number_sample, k, images):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Control the sonar')
-    parser.add_argument('--mode', type=int, default=3, help="0-time control scan result, 1-count control scan result, 2-tracking schemes")
+    parser.add_argument('--mode', type=int, default=3, help="different mode")
     parser.add_argument('--udp', action="store", required=False, type=str, default="192.168.1.13:12345", help="host:port")
     parser.add_argument('--speed', default=1500, required=False, help="define the speed of sound underwater")
     parser.add_argument('--dis', default=15, type=int, required=False, help="define the sonar ranging")
