@@ -432,7 +432,7 @@ class Tracker():
                 timestamp_node=N_leaf.obj.obtain_timestamp()
                 obj_time=obj.obj.obtain_timestamp()
                 time_delta=obj_time-timestamp_node
-                time_delta=0
+                time_delta=0 #only use location. We use pred_loc with time_delta later when solving retracking confliction
                 dis_temp=scorer.update_score(obj.obj,N_leaf.obj,time_delta)
                 if dis_temp<near_dis:
                     near_dis=dis_temp
