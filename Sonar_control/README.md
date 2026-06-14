@@ -55,8 +55,8 @@ This program controls the Ping360 sonar device, supporting multiple scanning mod
 | `--time` | int | 120 | Scan duration in seconds (Mode 0 only) |
 | `--count` | int | 3 | Total scan cycles (Modes 1-4) |
 | `--step` | int | 3 | Angular step size |
-| `--start` | int | 100 | Start angle (360° mapped to 0 -> 400) |
-| `--end` | int | 200 | End angle (360° mapped to 0 -> 400) |
+| `--start` | int | 100 | Start angle, unit gradians (0-399=0-360 degrees. 1 gradian=0.9degree) |
+| `--end` | int | 200 | End angle, unit gradians (0-399=0-360 degrees. 1 gradian=0.9degree)|
 | `--D` | int | 0 | Execution time-day |
 | `--H` | int | 0 | Execution time-hour |
 | `--M` | int | 0 | Execution time-minute |
