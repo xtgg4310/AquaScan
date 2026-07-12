@@ -853,10 +853,8 @@ def sonar_datalist_generate(data_path,label_path,save_path,eval=False):
         scenario_path_data=os.path.join(data_path,str(data_scenario_path[i]))
         scenario_path_label=os.path.join(label_path,str(data_scenario_path[i]))
 
-        if not eval:
-            make_prepare_data(scenario_path_data,scenario_path_label,save_path,data_scenario_path[i])
-        else:
-            make_eval_dataset(scenario_path_data,scenario_path_label,save_path,data_scenario_path[i],npy_file,noangle)
+
+        make_eval_dataset(scenario_path_data,scenario_path_label,save_path,data_scenario_path[i],npy_file,noangle)
 
 def make_eval_dataset(data_dir,label_dir,save_dir,s,npy_file=False,noangle_format=False):
     data_path = data_dir
@@ -914,13 +912,6 @@ def make_eval_dataset(data_dir,label_dir,save_dir,s,npy_file=False,noangle_forma
             Sonar_data.__process_one_pic_multi_ch_datalist__(data,label,save_file_dir,save_label_dir,s,file_name,sonar)
             print(s,file_path,label_list_files[i])
                 
-def generate_specific_list(data_path,label_path,save_path,path_s,eval=False):
-    scenario_path_data=os.path.join(data_path,str(path_s))
-    scenario_path_label=os.path.join(label_path,str(path_s))
-    if not eval:
-        make_prepare_data(scenario_path_data,scenario_path_label,save_path,path_s)
-    else:
-        make_eval_dataset(scenario_path_data,scenario_path_label,save_path,path_s)
     
     
 if __name__ == '__main__':
