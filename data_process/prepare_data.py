@@ -809,9 +809,9 @@ def make_prepare_data(data_dir,label_dir,save_dir,s):
     data_list_files=os.listdir(data_path)
     label_list_files=os.listdir(label_path)
     if '_' in label_list_files[0]:
-        label_list_files.sort(key=lambda x: int(x[:-4].split('_')[1]), reverse=True)
+        label_list_files.sort(key=lambda x: int(x[:-4].split('_')[1]), reverse=False)
     else:
-        label_list_files.sort(key=lambda x: int(x.split('.')[0]), reverse=True)
+        label_list_files.sort(key=lambda x: int(x.split('.')[0]), reverse=False)
     Sonar_data = SonarData(channels=3)
     for i in range(len(label_list_files)):
         if data_list_files[i][0]=='.':
