@@ -70,10 +70,10 @@ class Evaluator:
                 else:
                     gt_list=torch.concat([gt_list,label])
                 time_count+=time.time()-time_temp
-                metrics = self.compute_metrics(pred, label)
-                acc.update(metrics['acc'], bsz)
-                recall.update(metrics['recall'], bsz)
-                precision.update(metrics['precision'], bsz)
+                #metrics = self.compute_metrics(pred, label)
+                #acc.update(metrics['acc'], bsz)
+                #recall.update(metrics['recall'], bsz)
+                #precision.update(metrics['precision'], bsz)
                 for s, p,p_arg, l,f,h,s_n in zip(scenario, pred, pred.argmax(dim=1),label,file,human,sonar):
                     temp_p=p.cpu()
                     if s not in scenario_re:
@@ -90,14 +90,15 @@ class Evaluator:
                         scenario_acc_dict[s].update(0, 1)
                         scenario_frame[s]+=1
 
-                if CM is None:
-                    CM = self.compute_confusion_matrix(pred, label)
-                else:
-                    CM += self.compute_confusion_matrix(pred, label)
+                #if CM is None:
+                #    CM = self.compute_confusion_matrix(pred, label)
+                #else:
+                #    CM += self.compute_confusion_matrix(pred, label)
 
                 #wandb.log({'val_acc':acc.avg, 'val_recall':recall.avg, 'val_precision':precision.avg})
                 # if i % self.args.vis_freq == 0:
                 #     self.logger.save_imgs(x, pred.argmax(dim=1), label, filename, False)
+            '''
             metrics_all = self.compute_metrics(pred_list, gt_list)
             #print(metrics['acc'],metrics['recall'],metrics['precision'],bsz)
             acc_all=AverageMeter()
@@ -139,7 +140,7 @@ class Evaluator:
             #print("save")
             #for s in scenario_acc_dict:
             #    print("{}: {}, {}".format(s, scenario_acc_dict[s].avg, scenario_frame[s]))
-            
+            '''
             new_dir=self.args.result_dir+"/record"
             if not os.path.exists(new_dir):
                 os.makedirs(new_dir)
