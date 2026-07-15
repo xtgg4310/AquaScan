@@ -38,7 +38,7 @@ class ClassifyDataset(Dataset):
             _label = str(label_data_single[1].strip())
             human_id= str(label_data_single[0].strip())
             #label=_label
-            label = label2id.get(_label, -1)
+            label = -1 #label2id.get(_label, -1)
 
             if args.channel_num == 1:
                 sonar_data = cv2.imread(data_path, cv2.IMREAD_GRAYSCALE)
@@ -48,8 +48,8 @@ class ClassifyDataset(Dataset):
             else:
                 sonar_data=np.load(data_path)
                 sonar_data=sonar_data.astype(np.float32)
-            if label == -1:
-                continue
+            #if label == -1:
+            #    continue
             self.data.append(sonar_data)
             self.labels.append(label)
             self.file_name.append(os.path.basename(data_path))
