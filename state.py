@@ -430,8 +430,9 @@ def motion_state_smooth(real_state,timestamp,time_thre,len_win=5): #a sliding wi
                 if timestamp[2]-timestamp[0]>time_thre or timestamp[1]-timestamp[0]>time_thre:
                     continue
                 real_state[0]=real_state[1]
-            else:
-                continue
+            #else:
+            #    continue
+            continue
         if i == 1 and len(real_state)>=3:
             #print(i,"smooth")
             if timestamp[2]-timestamp[1]>time_thre:
@@ -454,7 +455,7 @@ def motion_state_smooth(real_state,timestamp,time_thre,len_win=5): #a sliding wi
                 continue
             else:
                 if i+int(len_win/2.0)<len(real_state):
-                    if real_state[i]==real_state[i-1]:
+                    if i>0 and real_state[i]==real_state[i-1]:
                         continue
                     else:
                         same_count=0
@@ -483,7 +484,7 @@ def motion_state_smooth(real_state,timestamp,time_thre,len_win=5): #a sliding wi
                             real_state[i]=real_state[diff_index]
                 #print(" ")
         else:
-            if real_state[i]==real_state[i-1]:
+            if i>0 and real_state[i]==real_state[i-1]:
                 #break
                 continue
             else:
