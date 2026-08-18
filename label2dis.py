@@ -336,9 +336,8 @@ def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_di
                     pre=False
                 sonar_data=ps.data_pre(sonar_data,data_config[0],data_config[1],remove,pre)
                 _,_,detect_obj=read_rescale_results(detect_path_one,ratio=3.0)
-                humans,states,objs_gt=read_rescale_results_gt(gt_file)
                 print(data_path_one)
-                pos_list=label2pos_seg(sonar_data,detect_obj,objs_gt,states,humans,dis)
+                pos_list=label2pos_seg(sonar_data,detect_obj,dis)
                 write_pos(pos_list,save_file)
                 write_label(pos_list,save_eval_file)
                 
