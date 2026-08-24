@@ -14,46 +14,6 @@ import copy
 import time
 import denoise_metric as dm
 
-
-def read_final_results(scenario_prefix,data_dir):
-    files=os.listdir(data_dir)
-    re_dict={}
-    for file in files:
-        if file[0:8]!=scenario_prefix:
-            continue
-        f=open(data_dir+"/"+file,'r')
-        lines=f.readlines()
-        for line in lines:
-            data=line.split(' ')
-            time=np.float32(data[0])
-            if time not in re_dict:
-                re_dict[time]=[]
-            else:
-                re_dict[time].append([data[1],np.float32(data[3]),np.float32(data[4]),np.float32(data[5]),np.float32(data[6])])
-    print(re_dict)
-    return re_dict
-
-                
-
-def obj_recover(obj,start,end):
-    if start>end:
-        temp=start
-        start=end
-        end=temp
-    obj_new=[]
-    print(start,end)
-    for obj_s in obj:
-        print(obj_s)
-        obj_x_min=obj_s[2]
-        obj_y_min=(obj_s[0]+start)*3
-        obj_x_max=obj_s[3]
-        obj_y_max=(obj_s[1]+start)*3
-        obj_new_single=[obj_y_min,obj_y_max,obj_x_min,obj_x_max]
-        obj_new.append(obj_new_single)
-        print(obj_new_single)
-   # print(obj_new)
-    return obj_new
-    
 def dir_create(dir):
     if not os.path.exists(dir):
         os.mkdir(dir)
