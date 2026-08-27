@@ -202,27 +202,6 @@ def calculate_iou(obj1, obj2):
     union = (obj1[1] - obj1[0]) * (obj1[3] - obj1[2]) + (obj2[1] - obj2[0]) * (obj2[3] - obj2[2]) - inter
     return inter / union
 
-def generate_moving_BBox(human,states,label):
-    merge_label=[]
-    for j in range(len(label)):
-        label_choose=j
-        #label_new_single=[human[label_choose],states[label_choose],label[label_choose][0],label[label_choose][1],label[label_choose][2],label[label_choose][3]]
-        #print(label_new_single)
-        label_y=(label[label_choose][0]+label[label_choose][1])/2.0
-        label_x=(label[label_choose][1]+label[label_choose][2])/2.0
-        x=np.cos(np.deg2rad(label_y))*label_x*2.0
-        y=np.sin(np.deg2rad(label_y))*label_x*2.0
-        label_new_single=[human[label_choose],states[label_choose],label_y,label_x,y,x]
-        merge_label.append(label_new_single)
-    merge_label.sort(key=lambda x: np.int32(x[0]))
-    localize=[]
-    #print(human)
-    #print(states)
-    #print(label)
-    #print(merge_label)
-    #print(" ")
-    return merge_label
-
 def read_trace(dir):
     files=os.listdir(dir)
     remove_list=[]
