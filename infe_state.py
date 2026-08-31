@@ -50,7 +50,7 @@ class Evaluator:
         pred_list=None
         self.model.eval()
         with torch.no_grad():
-            for idx, (x, label, filename, scenario,file,human,sonar) in enumerate(self.val_loader):
+            for idx, (x, label, filename, scenario,file,human,sonar) in enumerate(self.val_loader): #label has been set as -1 or ref during the inference stage.
                 #torch.no_grad()
                 #print(x.shape)
                 if self.enable_cuda:
