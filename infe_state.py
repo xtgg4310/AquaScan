@@ -36,44 +36,6 @@ class Evaluator:
         self.model.eval()
         self.val_loader = select_eval_loader(self.args)
         self.logger = Logger(self.args)
-import numpy as np
-import torch
-from data_process import select_eval_loader
-from model import select_model
-from options import get_options
-from utils.logger import Logger, AverageMeter
-import os
-import time
-import sklearn.metrics as metric
-import utils.torch_utils as torch_utils
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-import warnings
-warnings.filterwarnings("ignore")
-
-class Evaluator:
-    def __init__(self):
-        args = get_options()
-        self.args = args
-        self.model = select_model(args)
-        #self.model=self.model.double()
-        if self.args.load_not_strict:
-            torch_utils.load_match_dict(self.model, self.args.load_model_path)
-        else:
-            print("load model from {}".format(args.load_model_path))
-            self.model.load_state_dict(torch.load(args.load_model_path))
-        
-        self.enable_cuda = False
-        if len(self.args.gpus) >= 1:
-            self.enable_cuda = True
-            torch.cuda.set_device('cuda:{}'.format(self.args.gpus[0]))
-            self.model = self.model.cuda()
-
-        self.model.eval()
-        self.val_loader = select_eval_loader(self.args)
-        self.logger = Logger(self.args)
 
     
     def eval(self):
@@ -174,35 +136,6 @@ class Evaluator:
                     for i in range(len(content)):
                         fd.writelines(str(content[i][0][0])+","+str(content[i][0][1])+","+str(content[i][1])+","+str(content[i][2])+","+str(content[i][3])+","+str(content[i][4])+","+str(content[i][5])+"\n")
                 #        
-
-    def compute_metrics(self, pred, gt):
-        # you can call functions in metrics.py
-        pred = pred.argmax(dim=1)
-        acc = metric.accuracy_score(gt.cpu().numpy(), pred.cpu().numpy())
-        recall = metric.recall_score(gt.cpu().numpy(), pred.cpu().numpy(), average='macro')
-        precision = metric.precision_score(gt.cpu().numpy(), pred.cpu().numpy(), average='macro')
-        metrics = {
-            'acc': acc,
-            'recall': recall,
-            'precision': precision
-        }
-        return metrics
-
-    def compute_confusion_matrix(self, pred, gt):
-        pred = pred.argmax(dim=1)
-        cm = metric.confusion_matrix(gt.cpu().numpy(), pred.cpu().numpy(), labels=range(0, self.args.num_classes, 1))
-        return cm
-    
-def eval_main():
-    torch.cuda.empty_cache()
-    print("relasing")
-    evaluator = Evaluator()
-    evaluator.eval()
-
-
-if __name__ == '__main__':
-    eval_main()
-
 
     def compute_metrics(self, pred, gt):
         # you can call functions in metrics.py
