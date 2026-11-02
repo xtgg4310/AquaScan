@@ -296,7 +296,7 @@ def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_di
     for i in range(len(scenario)):    
         detect_raw_path=detect_direct+"/"+scenario[i]
         data_path_scenario=data_direct+"/"+scenario[i]
-        gt_path_scenario=gt_direct+"/"+scenario[i]
+        #gt_path_scenario=gt_direct+"/"+scenario[i]
         save_scenario=save_direct+"/"+scenario[i]
         save_eval=save_eval_label_dir+"/"+scenario[i]
         dir_create(save_scenario)
@@ -307,7 +307,7 @@ def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_di
         for sonar in sonars:
             detect_path_single=detect_raw_path+"/"+sonar+"/txt"
             data_path_sonar=data_path_scenario+"/"+sonar
-            gt_path_sonar=gt_path_scenario+"/"+sonar
+            #gt_path_sonar=gt_path_scenario+"/"+sonar
             save_sonar=save_scenario+"/"+sonar
             save_eval_sonar=save_eval+"/"+sonar
             dir_create(save_sonar)
@@ -322,7 +322,7 @@ def label2pos(detect_direct,data_direct,gt_direct,save_direct,save_eval_label_di
                 if read_type!=0 and read_type!=1:
                     data_path_one=data_path_sonar+"/"+file[:-4]+".npy"
                 save_file=save_sonar+"/"+file
-                gt_file=gt_path_sonar+"/"+file
+                #gt_file=gt_path_sonar+"/"+file
                 save_eval_file=save_eval_sonar+"/"+file
                 if read_type==0:
                     sonar_data,_,_=read_txt(data_path_one)
