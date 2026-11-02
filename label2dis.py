@@ -80,35 +80,7 @@ def read_txt_noangle(path,angle_range=400):
                     sonar_data[int(angle)] = data
             angle+=1
     return sonar_data, int(start_angle), int(end_angle)
-
-def img_recover(sonar_image,start=100,end=298):
-    data_new=np.zeros((400,500))
-    for i in range(len(sonar_image)):
-        data_new[start+i*3,:]=sonar_image[i,:]
-    return data_new
-
-def read_skip_data(path,angle_range=400,bias=0):
-    path_seg=path.split('/')[-1]
-    if '_' in path_seg:
-        file_name=str(path_seg.split('_')[1])
-    else:
-        file_name=path_seg
-    #print(file_name)
-    file_order=file_name.split('.')[0]
-    sonar_data = []
-    with open(path, 'r') as f:
-        lines = f.readlines()
-        start_angle = float(lines[0].split(' ')[0])
-        end_angle = float(lines[-1].split(' ')[0])
-        for line in lines:
-            angle, data = readline(line)
-            sonar_data.append(data)
-    if start_angle>end_angle:
-        sonar_data.reverse()
-    sonar_data=np.array(sonar_data)
-    print(start_angle,end_angle)
-    return sonar_data, int(start_angle), int(end_angle)
-
+    
 def read_rescale_results(file_path,ratio=1.0):
     human_ids = []
     states = []
@@ -135,7 +107,7 @@ def read_rescale_results(file_path,ratio=1.0):
             obj = [ymin, ymax, xmin, xmax,raw_bbox]
             objs.append(obj)
     return human_ids,states,objs
-
+'''
 def read_rescale_results_gt(file_path):
     human_ids = []
     states = []
@@ -161,7 +133,7 @@ def read_rescale_results_gt(file_path):
             human_ids.append(human)
             states.append(state)
     return human_ids,states,objs
-
+'''
 def read_pos_results(file_path):
     objs=[]
     with open(file_path,'r') as f:
